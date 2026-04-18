@@ -26,9 +26,9 @@ public class SplineTrack : MonoBehaviour
 
 	private LineRenderer lineRenderer;
 
-	public List<SplinePoint> Points() => points;
-	public bool Closed() => closed;
-	public int Resolution() => resolution;
+	public List<SplinePoint> Points => points;
+	public bool Closed => closed;
+	public int Resolution => resolution;
 
 	private void Awake()
 	{
@@ -37,7 +37,7 @@ public class SplineTrack : MonoBehaviour
 		lineRenderer.useWorldSpace = false;
 	}
 
-	public int SegmentCount() => closed ? points.Count : Mathf.Max(0, points.Count - 1);
+	public int SegmentCount => closed ? points.Count : Mathf.Max(0, points.Count - 1);
 
 	public void AddPoint(Vector3 position)
 	{
@@ -62,7 +62,7 @@ public class SplineTrack : MonoBehaviour
 		}
 
 		t = Mathf.Clamp01(t);
-		int segmentCount = SegmentCount();
+		int segmentCount = SegmentCount;
 		if (segmentCount == 0) return transform.position;
 
 		float scaledT = t * segmentCount;
@@ -82,7 +82,7 @@ public class SplineTrack : MonoBehaviour
 		}
 
 		t = Mathf.Clamp01(t);
-		int segmentCount = SegmentCount();
+		int segmentCount = SegmentCount;
 		if (segmentCount == 0)
 		{
 			return transform.forward;
@@ -143,11 +143,13 @@ public class SplineTrack : MonoBehaviour
 	public float GetTotalLength()
 	{
 		float length = 0f;
-		int steps = resolution * SegmentCount();
-		if (steps == 0)
+		int baseSteps = resolution * SegmentCount;
+		if (baseSteps == 0)
 		{
 			return 0f;
 		}
+
+		int steps = closed ? baseSteps + 1 : baseSteps;
 
 		Vector3 lastPoint = GetPoint(0f);
 		for (int i = 1; i <= steps; i++)
@@ -168,7 +170,7 @@ public class SplineTrack : MonoBehaviour
 			return;
 		}
 
-		int totalPoints = resolution * SegmentCount();
+		int totalPoints = resolution * SegmentCount;
 		if (totalPoints == 0)
 		{
 			lineRenderer.positionCount = 0;
