@@ -24,11 +24,14 @@ public class RoadMeshGenerator : MonoBehaviour
 	[SerializeField]
 	private bool generateShoulders = true;
 
-	[SerializeField]
-	private Material roadMaterial;
+[SerializeField]
+    private Material roadMaterial;
 
-	private MeshFilter meshFilter;
-	private MeshRenderer meshRenderer;
+    [SerializeField]
+    private bool generateCollider = true;
+
+    private MeshFilter meshFilter;
+    private MeshRenderer meshRenderer;
 
 	public void Generate()
 	{
@@ -40,14 +43,20 @@ public class RoadMeshGenerator : MonoBehaviour
 		meshFilter = GetComponent<MeshFilter>();
 		meshRenderer = GetComponent<MeshRenderer>();
 
-		if (meshFilter == null)
-		{
-			meshFilter = gameObject.AddComponent<MeshFilter>();
-		}
-		if (meshRenderer == null)
-		{
-			meshRenderer = gameObject.AddComponent<MeshRenderer>();
-		}
+if (meshFilter == null)
+        {
+            meshFilter = gameObject.AddComponent<MeshFilter>();
+        }
+        if (meshRenderer == null)
+        {
+            meshRenderer = gameObject.AddComponent<MeshRenderer>();
+        }
+
+        MeshCollider collider = GetComponent<MeshCollider>();
+        if (collider == null)
+        {
+            collider = gameObject.AddComponent<MeshCollider>();
+        }
 
 		Mesh mesh = new();
 		mesh.name = "RoadMesh";
@@ -114,13 +123,18 @@ public class RoadMeshGenerator : MonoBehaviour
 		mesh.triangles = triangles;
 		mesh.RecalculateNormals();
 
-		meshFilter.mesh = mesh;
+meshFilter.mesh = mesh;
 
-		if (roadMaterial != null)
-		{
-			meshRenderer.material = roadMaterial;
-		}
-	}
+        if (roadMaterial != null)
+        {
+            meshRenderer.material = roadMaterial;
+        }
+
+        if (generateCollider && collider != null)
+        {
+            collider.sharedMesh = mesh;
+        }
+    }
 
 	private void GenerateShoulders(int segmentCount, Vector3[] vertices, Vector2[] uvs, int[] triangles, ref float distance)
 	{
