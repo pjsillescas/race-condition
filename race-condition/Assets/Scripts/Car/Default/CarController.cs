@@ -4,14 +4,14 @@ using UnityEngine;
 #pragma warning disable 649
 namespace UnityStandardAssets.Vehicles.Car
 {
-	internal enum CarDriveType
+	public enum CarDriveType
 	{
 		FrontWheelDrive,
 		RearWheelDrive,
 		FourWheelDrive
 	}
 
-	internal enum SpeedType
+	public enum SpeedType
 	{
 		MPH,
 		KPH
@@ -61,14 +61,22 @@ namespace UnityStandardAssets.Vehicles.Car
 			m_Topspeed = newMaxSpeed;
 		}
 
-		public void SetMaximumSteerAngle(float newMaximumSteerAngle)
+		public void Setup(CarDataSO data)
 		{
-			m_MaximumSteerAngle = newMaximumSteerAngle;
-		}
+			m_CentreOfMassOffset = data.CentreOfMassOffset;
+			m_MaximumSteerAngle = data.MaximumSteerAngle;
+			m_SteerHelper = data.SteerHelper;
+			m_TractionControl = data.TractionControl;
+			m_FullTorqueOverAllWheels = data.FullTorqueOverAllWheels;
+			m_ReverseTorque = data.ReverseTorque;
+			m_MaxHandbrakeTorque = data.MaxHandbrakeTorque;
+			m_Downforce = data.Downforce;
+			m_SpeedType = data.SpeedType;
+			m_Topspeed = data.Topspeed;
+			m_RevRangeBoundary = data.RevRangeBoundary;
+			m_SlipLimit = data.SlipLimit;
+			m_BrakeTorque = data.BrakeTorque;
 
-		public void SetFullTorqueOverAllWheels(float newFullTorqueOverAllWheels)
-		{
-			m_FullTorqueOverAllWheels = newFullTorqueOverAllWheels;
 		}
 
 		// Use this for initialization

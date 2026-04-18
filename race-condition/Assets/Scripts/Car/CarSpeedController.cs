@@ -24,6 +24,12 @@ public class CarSpeedController : MonoBehaviour
 		isOutOfTrack = false;
 	}
 
+	public void Setup(float MaxSpeedOutOfTrack, float MaxSpeedInTrack)
+	{
+		this.MaxSpeedInTrack = MaxSpeedInTrack;
+		this.MaxSpeedOutOfTrack = MaxSpeedOutOfTrack;
+	}
+
 	private bool CheckWheel(GameObject wheel)
 	{
 		var ray = new Ray(wheel.transform.position, Vector3.down);
