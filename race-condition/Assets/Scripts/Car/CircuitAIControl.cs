@@ -60,7 +60,6 @@ public class CircuitAIControl : MonoBehaviour
 
 		float desiredSpeed = maxSpeed;
 		Vector3 targetPos = GetTargetPosition(out float targetAngle);
-		Vector3 carPos = transform.position;
 
 		if (!ignoreOtherCars)
 		{
@@ -139,10 +138,12 @@ public class CircuitAIControl : MonoBehaviour
 		
 		foreach (Collider col in nearbyCars)
 		{
-			if (col.gameObject == gameObject) continue;
-			
-			CircuitAIControl otherAI = col.GetComponent<CircuitAIControl>();
-			if (otherAI != null)
+			if (col.gameObject == gameObject)
+			{
+				continue;
+			}
+
+			if (col.TryGetComponent<CircuitAIControl>(out var otherAI))
 			{
 				Vector3 toOther = col.transform.position - transform.position;
 				float dot = Vector3.Dot(transform.forward, toOther.normalized);
@@ -170,8 +171,7 @@ public class CircuitAIControl : MonoBehaviour
 	{
 		if (circuit != null && circuit.Points.Count > 0)
 		{
-			transform.position = circuit.GetPoint(0f) + Vector3.up * 0.5f;
-			transform.rotation = Quaternion.LookRotation(circuit.GetTangent(0f));
+			transform.SetPositionAndRotation(circuit.GetPoint(0f) + Vector3.up * 0.5f, Quaternion.LookRotation(circuit.GetTangent(0f)));
 			currentT = 0f;
 		}
 	}

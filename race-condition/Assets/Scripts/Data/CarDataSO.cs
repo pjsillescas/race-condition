@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
 
@@ -9,7 +8,6 @@ public class CarDataSO : ScriptableObject
 
 	public float maxSpeedInTrack = 50f;
 	public float maxSpeedOutOfTrack = 10f;
-	//public float maxTopSpeed;
 
 	public Vector3 CentreOfMassOffset = Vector3.zero;
 	public float MaximumSteerAngle = 25f;
@@ -26,5 +24,4 @@ public class CarDataSO : ScriptableObject
 	public float SlipLimit = 0.3f;
 	public float BrakeTorque = 20000f;
 	public Material material;
-
 }
