@@ -7,11 +7,14 @@ using UnityStandardAssets.Vehicles.Car;
 public class CameraTrackingPoint : MonoBehaviour
 {
 	private List<CarController> cars;
+	private SplineTrack circuit;
 
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
+		circuit = FindAnyObjectByType<SplineTrack>();
+
 		cars = null;
 		StartCoroutine(DetectCars());
 	}
@@ -40,6 +43,12 @@ public class CameraTrackingPoint : MonoBehaviour
 			return; 
 		}
 
-		transform.position = GetCurrentPosition();
+		//transform.position = GetCurrentPosition();
+
+		var length = circuit.GetTotalLength();
+		var point = circuit.GetPoint(0);
+		//Debug.Log($"point {point}");
+
+		transform.position = point;
 	}
 }
