@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using System.Reflection;
 
 public class CircuitEditorWindow : EditorWindow
 {
@@ -20,6 +21,14 @@ public class CircuitEditorWindow : EditorWindow
 	private float uvScale = 1f;
 	private Vector2 uvTiling = new(1f, 10f);
 	private bool generateShoulders = true;
+
+	[SerializeField]
+	private GameObject carPrefab;
+
+	[SerializeField]
+	private int carCount = 3;
+
+	private AICarSpawner carSpawner;
 
 	private const float handleSize = 0.5f;
 	private const float pickSize = 1.5f;
@@ -74,6 +83,24 @@ public class CircuitEditorWindow : EditorWindow
 			if (GUILayout.Button("Generate Road Mesh"))
 			{
 				GenerateRoad();
+			}
+
+			EditorGUILayout.Space();
+			GUILayout.Label("AI Cars", EditorStyles.boldLabel);
+			carPrefab = (GameObject)EditorGUILayout.ObjectField("Car Prefab", carPrefab, typeof(GameObject), false);
+			carCount = EditorGUILayout.IntSlider("Car Count", carCount, 2, 10);
+
+			if (carPrefab != null && currentSpline != null)
+			{
+				if (GUILayout.Button("Spawn AI Cars"))
+				{
+					SpawnAICars();
+				}
+
+				if (carSpawner != null && GUILayout.Button("Clear AI Cars"))
+				{
+					ClearAICars();
+				}
 			}
 
 			EditorGUILayout.Space();
@@ -395,6 +422,41 @@ public class CircuitEditorWindow : EditorWindow
 		catch (System.Exception ex)
 		{
 			EditorUtility.DisplayDialog("Error", "Failed to generate road: " + ex.Message, "OK");
+		}
+	}
+
+	private void SpawnAICars()
+	{
+		if (carPrefab == null || currentSpline == null) return;
+
+		ClearAICars();
+
+		GameObject spawnerObj = new GameObject("AICarSpawner");
+		AICarSpawner spawner = spawnerObj.AddComponent<AICarSpawner>();
+		spawner.SetCircuit(currentSpline);
+		spawner.SetCarPrefab(carPrefab);
+
+		carSpawner = spawner;
+
+		FieldInfo countField = typeof(AICarSpawner).GetField("carCount", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+		if (countField != null)
+		{
+			countField.SetValue(spawner, carCount);
+		}
+
+		EditorUtility.DisplayDialog("AI Cars Spawned", $"Spawned {carCount} AI cars on the circuit!", "OK");
+	}
+
+	private void ClearAICars()
+	{
+		if (carSpawner != null)
+		{
+			foreach (GameObject car in carSpawner.GetSpawnedCars())
+			{
+				if (car != null) DestroyImmediate(car);
+			}
+			DestroyImmediate(carSpawner.gameObject);
+			carSpawner = null;
 		}
 	}
 }
