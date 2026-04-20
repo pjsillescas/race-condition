@@ -201,4 +201,73 @@ public class SplineTrack : MonoBehaviour
 		points.Clear();
 		UpdateLineRenderer();
 	}
+
+	public Vector3 GetClosestPointTo(Vector3 targetPosition)
+	{
+		int segmentCount = SegmentCount;
+		if (segmentCount == 0)
+		{
+			return transform.position;
+		}
+
+		float step = 1f / resolution;
+		float bestT = 0f;
+		float bestDistance = float.MaxValue;
+
+		for (int i = 0; i <= resolution * segmentCount; i++)
+		{
+			float t = i * step;
+			Vector3 point = GetPoint(t);
+			float distance = Vector3.Distance(point, targetPosition);
+			if (distance < bestDistance)
+			{
+				bestDistance = distance;
+				bestT = t;
+			}
+		}
+
+		bestT = GoldenSectionSearch(bestT, targetPosition);
+		return GetPoint(bestT);
+	}
+
+	private float GoldenSectionSearch(float initialT, Vector3 targetPosition)
+	{
+		const float EPSILON = 0.0001f;
+		
+		float a = Mathf.Max(0f, initialT - 0.1f);
+		float b = Mathf.Min(1f, initialT + 0.1f);
+		float goldenRatio = (1f + Mathf.Sqrt(5f)) / 2f;
+
+		float c = b - (b - a) / goldenRatio;
+		float d = a + (b - a) / goldenRatio;
+
+		for (int i = 0; i < 20; i++)
+		{
+			if (b - a < EPSILON)
+			{
+				return (a + b) / 2f;
+			}
+
+			if (DistanceTo(targetPosition, c) < DistanceTo(targetPosition, d))
+			{
+				b = d;
+			}
+			else
+			{
+				a = c;
+			}
+
+			var delta = (b - a) / goldenRatio;
+			c = b - delta;
+			d = a + delta;
+		}
+
+		return (a + b) / 2f;
+	}
+
+	private float DistanceTo(Vector3 targetPosition, float t)
+	{
+		//return Vector3.Distance(GetPoint(t), targetPosition);
+		return (targetPosition - GetPoint(t)).sqrMagnitude;
+	}
 }
