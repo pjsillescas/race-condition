@@ -17,6 +17,7 @@ namespace UnityStandardAssets.Vehicles.Car
 		KPH
 	}
 
+	[RequireComponent(typeof(Rigidbody))]
 	public class CarController : MonoBehaviour
 	{
 		[SerializeField] private CarDriveType m_CarDriveType = CarDriveType.FourWheelDrive;
@@ -51,7 +52,7 @@ namespace UnityStandardAssets.Vehicles.Car
 		public bool Skidding { get; private set; }
 		public float BrakeInput { get; private set; }
 		public float CurrentSteerAngle { get { return m_SteerAngle; } }
-		public float CurrentSpeed { get { return m_Rigidbody.linearVelocity.magnitude * 2.23693629f; } }
+		public float CurrentSpeed { get { return (m_Rigidbody != null) ? m_Rigidbody.linearVelocity.magnitude * 2.23693629f : 0; } }
 		public float MaxSpeed { get { return m_Topspeed; } }
 		public float Revs { get; private set; }
 		public float AccelInput { get; private set; }
@@ -152,6 +153,11 @@ namespace UnityStandardAssets.Vehicles.Car
 
 		public void Move(float steering, float accel, float footbrake, float handbrake)
 		{
+			if(m_Rigidbody == null)
+			{
+				return;
+			}
+
 			for (int i = 0; i < 4; i++)
 			{
 				Quaternion quat;

@@ -22,17 +22,10 @@ public class InGameObjectDetector : MonoBehaviour
 	{
 		yield return new WaitForSeconds(0.5f);
 		cars = new(FindObjectsByType<CarController>());
-		Debug.Log($"detector detected {cars.Count}");
-	}
-
-	private void OnTriggerEnter(Collider other)
-	{
-		Debug.Log($"trigger enter {other.name}");
 	}
 
 	private void OnTriggerExit(Collider other)
 	{
-		Debug.LogWarning($"exiting {other.name}");
 		var controller = other.gameObject.GetComponentInParent<CarController>();
 		if (controller != null)
 		{
@@ -44,17 +37,5 @@ public class InGameObjectDetector : MonoBehaviour
 				OnLastCarStanding?.Invoke(this, cars.First());
 			}
 		}
-		/*
-		if (other.gameObject.TryGetComponent(out CarController carController) && cars != null)
-		{
-			cars.Remove(carController);
-			OnCarEliminated?.Invoke(this, carController);
-
-			if (cars.Count == 1)
-			{
-				OnLastCarStanding?.Invoke(this, cars.First());
-			}
-		}
-		*/
 	}
 }

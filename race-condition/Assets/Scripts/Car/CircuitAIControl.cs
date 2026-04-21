@@ -49,6 +49,11 @@ public class CircuitAIControl : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+		if (carController == null)
+		{
+			return;
+		}
+
 		if (circuit == null || circuit.Points.Count < 2)
 		{
 			carController.Move(0, 0, 0, 1f);
@@ -67,6 +72,9 @@ public class CircuitAIControl : MonoBehaviour
 		}
 
 		targetPos = ApplyLateralWander(targetPos);
+		var len = (targetPos - transform.position).magnitude;
+		Debug.Log($"targetpos: {targetPos} (f {currentT}) (currentpos {transform.position}) [{len}]");
+
 
 		Vector3 localTarget = transform.InverseTransformPoint(targetPos);
 		float distanceToTarget = localTarget.magnitude;
@@ -89,13 +97,10 @@ public class CircuitAIControl : MonoBehaviour
 		if (distanceToTarget < 5f)
 		{
 			currentT += waypointDistance / circuit.GetTotalLength();
-			if (circuit.Closed)
+
+			if (currentT > 1)
 			{
-				currentT = currentT % 1f;
-			}
-			else
-			{
-				currentT = Mathf.Clamp01(currentT);
+				currentT -= 1f;
 			}
 		}
 

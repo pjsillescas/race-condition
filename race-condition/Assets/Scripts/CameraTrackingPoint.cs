@@ -24,7 +24,6 @@ public class CameraTrackingPoint : MonoBehaviour
 		yield return new WaitForSeconds(1f);
 
 		cars = new(FindObjectsByType<CarController>());
-		Debug.Log($"detected {cars.Count} cars");
 
 	}
 
