@@ -202,17 +202,19 @@ public class SplineTrack : MonoBehaviour
 		UpdateLineRenderer();
 	}
 
-	public Vector3 GetClosestPointTo(Vector3 targetPosition)
+	public void GetClosestPointIndexTo(Vector3 targetPosition, out float index, out float bestDistance)
 	{
 		int segmentCount = SegmentCount;
 		if (segmentCount == 0)
 		{
-			return transform.position;
+			index = -1f;
+			bestDistance = 0f;
+			return;
 		}
 
 		float step = 1f / resolution;
 		float bestT = 0f;
-		float bestDistance = float.MaxValue;
+		bestDistance = float.MaxValue;
 
 		for (int i = 0; i <= resolution * segmentCount; i++)
 		{
@@ -227,7 +229,13 @@ public class SplineTrack : MonoBehaviour
 		}
 
 		bestT = GoldenSectionSearch(bestT, targetPosition);
-		return GetPoint(bestT);
+		index = bestT;
+	}
+
+	public Vector3 GetClosestPointTo(Vector3 targetPosition)
+	{
+		GetClosestPointIndexTo(targetPosition, out float bestT, out _);
+		return (bestT < 0) ? transform.position : GetPoint(bestT);
 	}
 
 	private float GoldenSectionSearch(float initialT, Vector3 targetPosition)

@@ -33,8 +33,8 @@ public class CircuitAIControl : MonoBehaviour
 	private bool ignoreOtherCars;
 
 	private CarController carController;
-	private Rigidbody rigidbody;
-	private int currentWaypointIndex;
+	//private Rigidbody rigidbody;
+	//private int currentWaypointIndex;
 	private float currentT;
 	private float randomOffset;
 	private float lateralWanderTime;
@@ -42,7 +42,7 @@ public class CircuitAIControl : MonoBehaviour
 	private void Awake()
 	{
 		carController = GetComponent<CarController>();
-		rigidbody = GetComponent<Rigidbody>();
+		//rigidbody = GetComponent<Rigidbody>();
 		randomOffset = Random.Range(-lateralOffset, lateralOffset);
 		lateralWanderTime = Random.Range(0f, 10f);
 	}
@@ -72,8 +72,8 @@ public class CircuitAIControl : MonoBehaviour
 		}
 
 		targetPos = ApplyLateralWander(targetPos);
-		var len = (targetPos - transform.position).magnitude;
-		Debug.Log($"targetpos: {targetPos} (f {currentT}) (currentpos {transform.position}) [{len}]");
+		//var len = (targetPos - transform.position).magnitude;
+		// Debug.Log($"{targetPos.x},{targetPos.y},{targetPos.z},{transform.position.x},{transform.position.y},{transform.position.z},{currentT},{len}");
 
 
 		Vector3 localTarget = transform.InverseTransformPoint(targetPos);
@@ -94,7 +94,10 @@ public class CircuitAIControl : MonoBehaviour
 		float accelBrake = (desiredSpeed < currentSpeed) ? brakeSensitivity : accelSensitivity;
 		float accel = Mathf.Clamp((desiredSpeed - currentSpeed) * accelBrake, -1f, 1f);
 
-		if (distanceToTarget < 5f)
+		//const float minDistanceToTarget = 5f;
+		const float minDistanceToTarget = 10f;
+
+		if (distanceToTarget < minDistanceToTarget)
 		{
 			currentT += waypointDistance / circuit.GetTotalLength();
 

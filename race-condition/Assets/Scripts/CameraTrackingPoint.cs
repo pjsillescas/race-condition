@@ -6,7 +6,14 @@ using UnityStandardAssets.Vehicles.Car;
 
 public class CameraTrackingPoint : MonoBehaviour
 {
-	private List<CarController> cars;
+	private class CarTrackingDataDTO
+	{
+		public CarController car;
+		public float score;
+		public int lap;
+	}
+
+	private List<CarTrackingDataDTO> cars;
 	private SplineTrack circuit;
 
 
@@ -23,15 +30,68 @@ public class CameraTrackingPoint : MonoBehaviour
 	{
 		yield return new WaitForSeconds(1f);
 
-		cars = new(FindObjectsByType<CarController>());
+		cars = new List<CarController>(FindObjectsByType<CarController>()) //
+			.Select(controller => new CarTrackingDataDTO() { car = controller, score = 0f, lap = 0, }) //
+			.ToList();
 
 	}
 
 	private Vector3 GetCurrentPosition()
 	{
-		var activeCars = cars.Where(car => car.isActiveAndEnabled).ToList();
 
-		return activeCars.Select(car => car.transform.position).Aggregate(Vector3.zero, (acc, val) => val + acc) / activeCars.Count;
+		var activeCars = cars.Where(data => data.car.isActiveAndEnabled).ToList();
+
+		activeCars.ForEach(data =>
+		{
+			circuit.GetClosestPointIndexTo(data.car.transform.position, out float index, out float distance);
+
+			data.score = (distance < 10f) ? index : 0;
+			
+			//Debug.Log($"score {data.score}");
+		});
+
+		activeCars.Sort((data1, data2) =>
+		{
+			if (data1.lap == data2.lap)
+			{
+				if (data1.score == data2.score)
+				{
+					return 0;
+				}
+				else
+				{
+					return (data1.score < data2.score)  ? - 1 : 1;
+				}
+			}
+			else
+			{
+				return data1.lap > data2.lap ? 1 : -1;
+			}
+		});
+
+		var weightedPositions = activeCars.Select(data => data.car.transform.position).ToList();
+
+		for(int i=0;i<weightedPositions.Count;i++)
+		{
+			weightedPositions[i] = GetWeight(i, weightedPositions.Count) * weightedPositions[i];
+		}
+
+		return weightedPositions.Aggregate(Vector3.zero, (acc, val) => val + acc) / activeCars.Count;
+	}
+
+	private float GetWeight(int index, int count)
+	{
+		var weights2 = new float[] { 0.5f, 1.5f };
+		var weights3 = new float[] { 0.4f, 0.8f, 1.8f };
+		
+		float weight;
+		weight = count switch
+		{
+			3 => weights3[index],
+			2 => weights2[index],
+			_ => 1f,
+		};
+		return weight;
 	}
 
 	// Update is called once per frame
@@ -39,7 +99,7 @@ public class CameraTrackingPoint : MonoBehaviour
 	{
 		if (cars == null || cars.Count == 0)
 		{
-			return; 
+			return;
 		}
 
 		var currentPosition = GetCurrentPosition();
