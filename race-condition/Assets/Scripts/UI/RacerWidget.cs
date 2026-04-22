@@ -43,6 +43,8 @@ public class RacerWidget : MonoBehaviour
 			return;
 		}
 
+		data = new(data);
+		data.Reverse();
 		int k = 0;
 		playerTexts.ForEach((text) => {
 			if (k < data.Count)
