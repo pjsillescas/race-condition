@@ -49,6 +49,8 @@ namespace UnityStandardAssets.Vehicles.Car
 		private Rigidbody m_Rigidbody;
 		private const float k_ReversingThreshold = 0.01f;
 
+		private CarDataSO carData;
+
 		public bool Skidding { get; private set; }
 		public float BrakeInput { get; private set; }
 		public float CurrentSteerAngle { get { return m_SteerAngle; } }
@@ -62,8 +64,13 @@ namespace UnityStandardAssets.Vehicles.Car
 			m_Topspeed = newMaxSpeed;
 		}
 
+		public CarDataSO GetCarData() => carData;
+
 		public void Setup(CarDataSO data)
 		{
+			Debug.Log($"init {data.carName}");
+			carData = data;
+
 			m_CentreOfMassOffset = data.CentreOfMassOffset;
 			m_MaximumSteerAngle = data.MaximumSteerAngle;
 			m_SteerHelper = data.SteerHelper;

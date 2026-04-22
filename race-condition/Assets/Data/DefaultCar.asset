@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4d9eb9dd5efe97409c3c8ce60eb5d48, type: 3}
   m_Name: DefaultCar
   m_EditorClassIdentifier: Assembly-CSharp::CarDataSO
-  carName: 
+  carName: Default
   maxSpeedInTrack: 50
   maxSpeedOutOfTrack: 10
-  maxTopSpeed: 0
   CentreOfMassOffset: {x: 0, y: 0, z: 0}
   MaximumSteerAngle: 25
   SteerHelper: 0.644

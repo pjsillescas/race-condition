@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,13 @@ using UnityStandardAssets.Vehicles.Car;
 
 public class CameraTrackingPoint : MonoBehaviour
 {
-	private class CarTrackingDataDTO
+	public class SortedCarsData
+	{
+		public List<CarController> cars; 
+	}
+	public static event EventHandler<List<CarTrackingDataDTO>> OnCarSorted;
+
+	public class CarTrackingDataDTO
 	{
 		public CarController car;
 		public float score;
@@ -69,6 +76,11 @@ public class CameraTrackingPoint : MonoBehaviour
 			}
 		});
 
+		//var sortedCars = activeCars.Select(data => data.car).ToList();
+		//Debug.Log($"sorted cars {sortedCars.Count}");
+		//OnCarSorted?.Invoke(this, new SortedCarsData() { cars = sortedCars });
+
+		OnCarSorted?.Invoke(this, activeCars);
 		var weightedPositions = activeCars.Select(data => data.car.transform.position).ToList();
 
 		for(int i=0;i<weightedPositions.Count;i++)
