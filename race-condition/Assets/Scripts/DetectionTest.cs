@@ -17,12 +17,12 @@ public class DetectionTest : MonoBehaviour
 
 	private void OnCarEliminated(object sender, CarController carController)
 	{
-		Debug.Log($"eliminated {carController.name}");
+		//Debug.Log($"eliminated {carController.name}");
 	}
 
 	private void OnLastCarStanding(object sender, CarController carController)
 	{
-		Debug.Log($"winner {carController.name}");
+		//Debug.Log($"winner {carController.name}");
 	}
 
 	// Update is called once per frame

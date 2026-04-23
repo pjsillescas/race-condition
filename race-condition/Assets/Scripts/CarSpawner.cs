@@ -25,12 +25,6 @@ public class CarSpawner : MonoBehaviour
 		SpawnCars(data);
 	}
 
-	// Update is called once per frame
-	void Update()
-	{
-
-	}
-
 	public void SpawnCars(List<PlayerDataSO> playersData)
 	{
 		if (circuit == null || PlayerCarPrefab == null || PlayerCarPrefab == null)
@@ -59,7 +53,7 @@ public class CarSpawner : MonoBehaviour
 			
 			if(car.TryGetComponent(out CircuitAIControl aiControl))
 			{
-				aiControl.SetCircuit(circuit, i);
+				aiControl.SetCircuit(circuit, i - 1);
 				aiControl.ResetToStart();
 			}
 

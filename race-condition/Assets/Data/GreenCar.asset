@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GreenCar
   m_EditorClassIdentifier: Assembly-CSharp::CarDataSO
   carName: Green
-  maxSpeedInTrack: 150
+  maxSpeedInTrack: 200
   maxSpeedOutOfTrack: 75
   CentreOfMassOffset: {x: 0, y: 0, z: 0}
   MaximumSteerAngle: 25

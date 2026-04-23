@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4d9eb9dd5efe97409c3c8ce60eb5d48, type: 3}
-  m_Name: DefaultCar
+  m_Name: DefaultCar1
   m_EditorClassIdentifier: Assembly-CSharp::CarDataSO
-  carName: Debug IA
+  carName: Debug IA2
   maxSpeedInTrack: 150
   maxSpeedOutOfTrack: 75
   CentreOfMassOffset: {x: 0, y: 0, z: 0}
