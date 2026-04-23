@@ -65,7 +65,11 @@ namespace UnityStandardAssets.Vehicles.Car
 		}
 
 		public CarDataSO GetCarData() => carData;
-
+		public void Setup(PlayerDataSO data)
+		{
+			Setup(data.carData);
+		}
+		
 		public void Setup(CarDataSO data)
 		{
 			Debug.Log($"init {data.carName}");

@@ -12,21 +12,21 @@ public class AICarSpawner : MonoBehaviour
 	[SerializeField]
 	private int carCount = 3;
 
-	[SerializeField]
-	private float spawnSpacing = 3f;
+	//[SerializeField]
+	//private float spawnSpacing = 3f;
 
-	[SerializeField]
-	private float startDelay = 2f;
+	//[SerializeField]
+	//private float startDelay = 2f;
 
 	private List<GameObject> spawnedCars = new List<GameObject>();
-	private bool raceStarted;
+	//private bool raceStarted;
 
 	private void Start()
 	{
 		if (circuit == null || carPrefab == null) return;
 
-		float circuitLength = circuit.GetTotalLength();
-		float startOffset = 0f;
+		//float circuitLength = circuit.GetTotalLength();
+		//float startOffset = 0f;
 
 		for (int i = 0; i < carCount; i++)
 		{
@@ -49,17 +49,18 @@ public class AICarSpawner : MonoBehaviour
 			spawnedCars.Add(car);
 		}
 
-		Invoke(nameof(StartRace), startDelay);
+		//Invoke(nameof(StartRace), startDelay);
 	}
-
+	/*
 	private void StartRace()
 	{
 		raceStarted = true;
 	}
+	*/
 
 	public void StopRace()
 	{
-		raceStarted = false;
+		//raceStarted = false;
 		foreach (GameObject car in spawnedCars)
 		{
 			if (car != null)
