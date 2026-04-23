@@ -11,8 +11,9 @@ public class CarSetup : MonoBehaviour
 		public Material material;
 	}
 
-	public void Setup(CarDataSO carSetup)
+	public void Setup(PlayerDataSO playerSetup)
 	{
+		var carSetup = playerSetup.carData;
 		Material material = carSetup.material;
 
 		if (material != null)
@@ -25,7 +26,7 @@ public class CarSetup : MonoBehaviour
 		}
 
 		CarController carController = gameObject.GetComponent<CarController>();
-		carController.Setup(carSetup);
+		carController.Setup(playerSetup);
 		gameObject.GetComponent<CarSpeedController>().Setup(carSetup.maxSpeedOutOfTrack, carSetup.maxSpeedInTrack);
 	}
 }

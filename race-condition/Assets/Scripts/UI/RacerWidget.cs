@@ -49,7 +49,7 @@ public class RacerWidget : MonoBehaviour
 		playerTexts.ForEach((text) => {
 			if (k < data.Count)
 			{
-				var carName = data[k].car.GetCarData()?.carName ?? "IA";
+				var carName = data[k].car.GetPlayerData()?.playerName ?? "Default IA";
 				var score = data[k].score;
 				text.text = $"{carName} {score}";
 			}
