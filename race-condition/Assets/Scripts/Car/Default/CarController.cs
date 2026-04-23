@@ -85,6 +85,21 @@ namespace UnityStandardAssets.Vehicles.Car
 			m_SlipLimit = data.SlipLimit;
 			m_BrakeTorque = data.BrakeTorque;
 
+			SetMaterial(data.material);
+
+			gameObject.GetComponent<CarSpeedController>().Setup(data.maxSpeedOutOfTrack, data.maxSpeedInTrack);
+		}
+
+		private void SetMaterial(Material material)
+		{
+			if (material != null)
+			{
+				transform.Find("SkyCar/SkyCarBody").GetComponent<MeshRenderer>().material = material;
+				transform.Find("SkyCar/SkyCarMudGuardFrontLeft").GetComponent<MeshRenderer>().material = material;
+				transform.Find("SkyCar/SkyCarMudGuardFrontRight").GetComponent<MeshRenderer>().material = material;
+				transform.Find("SkyCar/SkyCarSuspensionFrontLeft").GetComponent<MeshRenderer>().material = material;
+				transform.Find("SkyCar/SkyCarSuspensionFrontRight").GetComponent<MeshRenderer>().material = material;
+			}
 		}
 
 		// Use this for initialization

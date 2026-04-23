@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
 
@@ -41,8 +40,6 @@ public class CarSpawner : MonoBehaviour
 
 		var carCount = playersData.Count;
 
-		//float circuitLength = circuit.GetTotalLength();
-
 		for (int i = 0; i < carCount; i++)
 		{
 			var playerData = playersData[i];
@@ -53,14 +50,12 @@ public class CarSpawner : MonoBehaviour
 			Vector3 right = Vector3.Cross(circuit.GetTangent(0f), Vector3.up).normalized;
 			spawnPos += right * lateralOffset;
 
-			
 			var carPrefab = playerData.isIA ? AICarPrefab : PlayerCarPrefab;
 			CarController car = Instantiate(carPrefab, spawnPos, spawnRot).GetComponent<CarController>();
 
 			var carName = playerData.isIA ? "ai" : "player";
 			car.name = $"{carName}_{i}";
-			//car.Setup(playerData);
-			car.GetComponent<CarSetup>().Setup(playerData);
+			car.Setup(playerData);
 			
 			if(car.TryGetComponent(out CircuitAIControl aiControl))
 			{

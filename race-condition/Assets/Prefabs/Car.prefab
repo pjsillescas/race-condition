@@ -6256,7 +6256,6 @@ GameObject:
   - component: {fileID: 8520081248416133452}
   - component: {fileID: 8520081248422520782}
   - component: {fileID: 8520081248422520788}
-  - component: {fileID: 4519601286358669138}
   - component: {fileID: 8101291552968990267}
   - component: {fileID: 8798402973516632804}
   m_Layer: 0
@@ -6379,26 +6378,6 @@ MonoBehaviour:
   maxRolloffDistance: 500
   dopplerLevel: 1
   useDoppler: 1
---- !u!114 &4519601286358669138
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8520081248412799558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18f7688093554f64cbf815237b7d970f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CarType: 
-  MaterialMappings:
-  - color: 0
-    material: {fileID: 2100000, guid: 8494ddcf12651364ca20528978193b0c, type: 2}
-  - color: 1
-    material: {fileID: 2100000, guid: 39310f2b0a67dd34f88c3e92a6044019, type: 2}
-  - color: 2
-    material: {fileID: 2100000, guid: 0fc18e23f36bbe54abc0a7be78d6693c, type: 2}
 --- !u!114 &8101291552968990267
 MonoBehaviour:
   m_ObjectHideFlags: 0
