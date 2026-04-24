@@ -47,6 +47,11 @@ public class CircuitAIControl : MonoBehaviour
 		lateralWanderTime = Random.Range(0f, 10f);
 	}
 
+	public void SetCurrentT(float newT)
+	{
+		currentT = newT;
+	}
+
 	private void FixedUpdate()
 	{
 		if (carController == null)

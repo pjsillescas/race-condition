@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 #pragma warning disable 649
@@ -50,6 +51,9 @@ namespace UnityStandardAssets.Vehicles.Car
 		private const float k_ReversingThreshold = 0.01f;
 
 		private PlayerDataSO playerData;
+		private bool isEnabled = true;
+		private float forceWeight = -1f;
+		private float force = -1f;
 
 		public bool Skidding { get; private set; }
 		public float BrakeInput { get; private set; }
@@ -66,8 +70,6 @@ namespace UnityStandardAssets.Vehicles.Car
 
 		public float GetCurrentSpeed() => CurrentSpeed;
 
-		private float forceWeight = -1f;
-		private float force = -1f;
 		public void AddBoost(float force)
 		{
 			if (m_Rigidbody != null && m_Rigidbody.linearVelocity != Vector3.zero)
@@ -75,6 +77,20 @@ namespace UnityStandardAssets.Vehicles.Car
 				forceWeight = 1f;
 				this.force = force;
 			}
+		}
+
+		public bool GetIsEnabled() => isEnabled;
+
+		public void Enable()
+		{
+			Debug.Log($"enable {name}");
+			isEnabled = true;
+		}
+
+		public void Disable()
+		{
+			Debug.Log($"disable {name}");
+			isEnabled = false;
 		}
 
 		private void FixedUpdate()
@@ -97,7 +113,7 @@ namespace UnityStandardAssets.Vehicles.Car
 		{
 			this.playerData = playerData;
 			var data = playerData.carData;
-			Debug.Log($"init {playerData.playerName}");
+			//Debug.Log($"init {playerData.playerName}");
 
 			m_CentreOfMassOffset = data.CentreOfMassOffset;
 			m_MaximumSteerAngle = data.MaximumSteerAngle;
@@ -203,6 +219,15 @@ namespace UnityStandardAssets.Vehicles.Car
 
 		public void Move(float steering, float accel, float footbrake, float handbrake)
 		{
+			if(!isEnabled)
+			{
+				if(m_Rigidbody != null)
+				{
+					m_Rigidbody.linearVelocity = Vector3.zero;
+				}
+				return;
+			}
+
 			if(m_Rigidbody == null)
 			{
 				return;

@@ -15,12 +15,17 @@ public class InGameObjectDetector : MonoBehaviour
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
-		StartCoroutine(DetectCars());
+		StartCoroutine(RefreshCarsCoroutine());
 	}
 
-	private IEnumerator DetectCars()
+	private IEnumerator RefreshCarsCoroutine()
 	{
 		yield return new WaitForSeconds(0.5f);
+		RefreshCars();
+	}
+
+	private void RefreshCars()
+	{
 		cars = new(FindObjectsByType<CarController>());
 	}
 
@@ -35,6 +40,8 @@ public class InGameObjectDetector : MonoBehaviour
 			if (cars.Count == 1)
 			{
 				OnLastCarStanding?.Invoke(this, cars.First());
+
+				RefreshCars();
 			}
 		}
 	}

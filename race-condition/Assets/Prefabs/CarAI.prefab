@@ -7724,7 +7724,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.62, y: 1, z: 1.5}
+  m_Size: {x: 2.5, y: 1, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2909010676155409370
 MonoBehaviour:
@@ -7738,3 +7738,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9407b3ffc376ccd4181f5cd2dd693900, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BackBooster
+  MinSpeed: 50
+  BoostForce: 20000

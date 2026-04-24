@@ -1,4 +1,7 @@
+using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
 
@@ -34,18 +37,14 @@ public class CarSpawner : MonoBehaviour
 
 		var carCount = playersData.Count;
 
+		// spawn cars
 		for (int i = 0; i < carCount; i++)
 		{
 			var playerData = playersData[i];
-			Vector3 spawnPos = circuit.GetPoint(0f);
-			Quaternion spawnRot = Quaternion.LookRotation(circuit.GetTangent(0f));
-
-			float lateralOffset = (i - carCount / 2f) * 2f;
-			Vector3 right = Vector3.Cross(circuit.GetTangent(0f), Vector3.up).normalized;
-			spawnPos += right * lateralOffset;
 
 			var carPrefab = playerData.isIA ? AICarPrefab : PlayerCarPrefab;
-			CarController car = Instantiate(carPrefab, spawnPos, spawnRot).GetComponent<CarController>();
+			CarController car = Instantiate(carPrefab, Vector3.zero, Quaternion.identity).GetComponent<CarController>();
+			car.Disable();
 
 			var carName = playerData.isIA ? "ai" : "player";
 			car.name = $"{carName}_{i}";
@@ -59,5 +58,43 @@ public class CarSpawner : MonoBehaviour
 
 			spawnedCars.Add(car);
 		}
+
+		// place cars
+		InitCarsInCircuit(0f);
+	}
+
+	public void InitCarsInCircuit(float t)
+	{
+		Vector3 spawnPos = circuit.GetPoint(t);
+		var tangent = circuit.GetTangent(t);
+
+		Quaternion spawnRot = Quaternion.LookRotation(tangent);
+		var carCount = spawnedCars.Count;
+		for (int i = 0; i < carCount; i++)
+		{
+			float lateralOffset = (i - carCount / 2f) * 3f + 2f;
+			Vector3 right = Vector3.Cross(tangent, Vector3.up).normalized;
+			var spawnPosition = spawnPos + right * lateralOffset;
+
+			var car = spawnedCars[i];
+			car.transform.SetPositionAndRotation(spawnPosition, spawnRot);
+
+			var aiControl = car.GetComponent<CircuitAIControl>();
+			if(aiControl != null)
+			{
+				aiControl.SetCurrentT(t);
+			}
+
+			StartCoroutine(EnableCarCoroutine(car));
+		}
+	}
+
+	private IEnumerator EnableCarCoroutine(CarController car)
+	{
+		car.Disable();
+		
+		yield return new WaitForSeconds(0.5f);
+		
+		car.Enable();
 	}
 }
