@@ -64,6 +64,34 @@ namespace UnityStandardAssets.Vehicles.Car
 			m_Topspeed = newMaxSpeed;
 		}
 
+		public float GetCurrentSpeed() => CurrentSpeed;
+
+		private float forceWeight = -1f;
+		private float force = -1f;
+		public void AddBoost(float force)
+		{
+			if (m_Rigidbody != null && m_Rigidbody.linearVelocity != Vector3.zero)
+			{
+				forceWeight = 1f;
+				this.force = force;
+			}
+		}
+
+		private void FixedUpdate()
+		{
+			if (forceWeight > 0 && force > 0f)
+			{
+				m_Rigidbody.AddForce( forceWeight * force * m_Rigidbody.linearVelocity.normalized, ForceMode.Acceleration);
+				forceWeight -= 0.2f;
+
+				if(forceWeight <= 0f)
+				{
+					forceWeight = -1f;
+					force = -1f;
+				}
+			}
+		}
+
 		public PlayerDataSO GetPlayerData() => playerData;
 		public void Setup(PlayerDataSO playerData)
 		{

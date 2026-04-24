@@ -3,7 +3,12 @@ using UnityStandardAssets.Vehicles.Car;
 
 public class BackBooster : MonoBehaviour
 {
-    private CarController carController;
+    [SerializeField]
+    private float MinSpeed = 50f;
+    [SerializeField]
+    private float BoostForce = 20000f;
+
+	private CarController carController;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -14,9 +19,9 @@ public class BackBooster : MonoBehaviour
 	private void OnTriggerEnter(Collider other)
 	{
         var controller = other.GetComponentInParent<CarController>();
-        if(controller != null)
+        if(controller != null && controller.GetCurrentSpeed() > MinSpeed)
         {
-			Debug.Log("crash");
+            carController.AddBoost(BoostForce);
 		}
 	}
 }
