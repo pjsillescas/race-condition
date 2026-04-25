@@ -1,27 +1,28 @@
+using System;
 using UnityEngine;
+using UnityStandardAssets.Vehicles.Car;
 
 public class Checkpoint : MonoBehaviour
 {
-	private CarMonitor carMonitor;
+	public static event EventHandler<CarController> OnEndLap;
+	//private CarMonitor carMonitor;
 
 	// Start is called before the first frame update
 	void Start()
 	{
-		carMonitor = FindAnyObjectByType<CarMonitor>();
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
+		//carMonitor = FindAnyObjectByType<CarMonitor>();
 
 	}
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.name == "ColliderBody" && other.transform.parent.parent.TryGetComponent(out PecCarUserControl controller) && controller.isActiveAndEnabled)
+		if (other.transform.parent != null //
+			&& other.transform.parent.TryGetComponent(out CarController controller) //
+			&& controller.GetIsEnabled())
 		{
-			Debug.Log("End lap");
-			carMonitor.EndLap();
+			OnEndLap?.Invoke(this, controller);
+			//Debug.Log("End lap");
+			//carMonitor.EndLap();
 		}
 
 	}

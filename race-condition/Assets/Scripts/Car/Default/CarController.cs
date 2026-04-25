@@ -51,6 +51,7 @@ namespace UnityStandardAssets.Vehicles.Car
 		private const float k_ReversingThreshold = 0.01f;
 
 		private PlayerDataSO playerData;
+		[SerializeField]
 		private bool isEnabled = true;
 		private float forceWeight = -1f;
 		private float force = -1f;
@@ -83,13 +84,13 @@ namespace UnityStandardAssets.Vehicles.Car
 
 		public void Enable()
 		{
-			Debug.Log($"enable {name}");
+			// Debug.Log($"enable {name}");
 			isEnabled = true;
 		}
 
 		public void Disable()
 		{
-			Debug.Log($"disable {name}");
+			// Debug.Log($"disable {name}");
 			isEnabled = false;
 		}
 

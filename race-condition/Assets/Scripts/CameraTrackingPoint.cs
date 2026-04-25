@@ -12,12 +12,30 @@ public class CameraTrackingPoint : MonoBehaviour
 	public class CarTrackingDataDTO
 	{
 		public CarController car;
-		public float score;
+		public float sortScore;
 		public int lap;
 	}
 
 	private List<CarTrackingDataDTO> cars;
 	private SplineTrack circuit;
+
+	private void OnEnable()
+	{
+		Checkpoint.OnEndLap += OnControllerEndLap;
+	}
+
+	private void OnDisable()
+	{
+		Checkpoint.OnEndLap += OnControllerEndLap;
+	}
+
+	private void OnControllerEndLap(object sender, CarController controller)
+	{
+		var car = cars.First(car => car.car == controller);
+		car.lap++;
+
+		SortCars();
+	}
 
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,44 +52,34 @@ public class CameraTrackingPoint : MonoBehaviour
 		yield return new WaitForSeconds(1f);
 
 		cars = new List<CarController>(FindObjectsByType<CarController>()) //
-			.Select(controller => new CarTrackingDataDTO() { car = controller, score = 0f, lap = 0, }) //
+			.Select(controller => new CarTrackingDataDTO() { car = controller, sortScore = 0f, lap = 0, }) //
 			.ToList();
 
 	}
-	/*
-	private Vector3 carPosition = Vector3.zero;
-	private Vector3 circuitPosition = Vector3.zero;
-
-	private void OnDrawGizmos()
+	
+	private List<CarTrackingDataDTO> SortCars()
 	{
-		Gizmos.DrawSphere(carPosition, 1f);
-		Gizmos.DrawSphere(circuitPosition, 1f);
-		Debug.Log($"circuitposition {circuitPosition}");
-	}
-	*/
-	private Vector3 GetCurrentPosition()
-	{
-		var activeCars = cars.Where(data => data.car.isActiveAndEnabled).ToList();
+		var activeCars = cars.Where(data => data.car.GetIsEnabled()).ToList();
 
 		activeCars.ForEach(data =>
 		{
 			var carPosition = new Vector3(data.car.transform.position.x, 0, data.car.transform.position.z);
 			circuit.GetClosestPointIndexTo(carPosition, out float index, out float distance);
 
-			data.score = (distance < 20f) ? index : 0;
+			data.sortScore = (distance < 20f) ? index : 0;
 		});
 
 		activeCars.Sort((data1, data2) =>
 		{
 			if (data1.lap == data2.lap)
 			{
-				if (data1.score == data2.score)
+				if (data1.sortScore == data2.sortScore)
 				{
 					return 0;
 				}
 				else
 				{
-					return (data1.score < data2.score) ? -1 : 1;
+					return (data1.sortScore < data2.sortScore) ? -1 : 1;
 				}
 			}
 			else
@@ -81,6 +89,13 @@ public class CameraTrackingPoint : MonoBehaviour
 		});
 
 		OnCarSorted?.Invoke(this, activeCars);
+
+		return activeCars;
+	}
+
+	private Vector3 GetCurrentPosition()
+	{
+		var activeCars = SortCars();
 
 		var weightedPositions = activeCars.Select(data => data.car.transform.position).ToList();
 

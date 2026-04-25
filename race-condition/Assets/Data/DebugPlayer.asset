@@ -15,3 +15,4 @@ MonoBehaviour:
   playerName: Player
   isIA: 0
   carData: {fileID: 11400000, guid: 9ee0a8bb44d440d44a68fe0b1d29b132, type: 2}
+  scoreMaterial: {fileID: 2100000, guid: 804a860c0714635428ff7978e2bcbffd, type: 2}

@@ -50,7 +50,7 @@ public class RacerWidget : MonoBehaviour
 			if (k < data.Count)
 			{
 				var carName = data[k].car.GetPlayerData()?.playerName ?? "Default IA";
-				var score = data[k].score;
+				var score = data[k].sortScore;
 				text.text = $"{carName} {score}";
 			}
 			else

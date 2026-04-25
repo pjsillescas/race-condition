@@ -3,6 +3,8 @@ using UnityStandardAssets.Vehicles.Car;
 
 public class Watchdog : MonoBehaviour
 {
+	private SplineTrack track;
+
 	private void OnEnable()
 	{
 		InGameObjectDetector.OnCarEliminated += OnCarEliminated;
@@ -22,15 +24,16 @@ public class Watchdog : MonoBehaviour
 
 	private void OnLastCarStanding(object sender, CarController carController)
 	{
-		Debug.Log($"point to {carController.name}");
-		FindAnyObjectByType<CarSpawner>().InitCarsInCircuit(0f);
+		track.GetClosestPointIndexTo(carController.transform.position, out float index, out float _);
+		//Debug.Log($"point to {carController.name}");
+		FindAnyObjectByType<CarSpawner>().InitCarsInCircuit(index);
 	}
 
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
-
+		track = FindAnyObjectByType<SplineTrack>();
 	}
 
 	// Update is called once per frame
