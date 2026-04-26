@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
 
@@ -16,8 +17,12 @@ public class CameraTrackingPoint : MonoBehaviour
 		public int lap;
 	}
 
+	[SerializeField]
+	private CinemachineCamera GameCamera;
+	
 	private List<CarTrackingDataDTO> cars;
 	private SplineTrack circuit;
+	private CameraManager cameraManager;
 
 	private void OnEnable()
 	{
@@ -42,9 +47,18 @@ public class CameraTrackingPoint : MonoBehaviour
 	void Start()
 	{
 		circuit = FindAnyObjectByType<SplineTrack>();
-
+		cameraManager = FindAnyObjectByType<CameraManager>();
+		
 		cars = null;
 		StartCoroutine(DetectCars());
+
+		ResetGame();
+	}
+
+	public void ResetGame()
+	{
+		Debug.Log("setting game camera");
+		cameraManager.SetCamera(GameCamera);
 	}
 
 	private IEnumerator DetectCars()
@@ -54,7 +68,6 @@ public class CameraTrackingPoint : MonoBehaviour
 		cars = new List<CarController>(FindObjectsByType<CarController>()) //
 			.Select(controller => new CarTrackingDataDTO() { car = controller, sortScore = 0f, lap = 0, }) //
 			.ToList();
-
 	}
 	
 	private List<CarTrackingDataDTO> SortCars()

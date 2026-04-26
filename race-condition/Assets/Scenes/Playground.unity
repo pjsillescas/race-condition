@@ -1214,6 +1214,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 271071638}
   m_CullTransparentMesh: 1
+--- !u!1 &280309075
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 280309077}
+  - component: {fileID: 280309076}
+  m_Layer: 0
+  m_Name: CameraManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &280309076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280309075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5adb2737c21503f4487c69864011030b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraManager
+--- !u!4 &280309077
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280309075}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &295378930
 GameObject:
   m_ObjectHideFlags: 0
@@ -4472,6 +4516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 759623e8d2bc03244b4cf051fbe28ea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraTrackingPoint
+  GameCamera: {fileID: 1178773057}
 --- !u!1 &854762328
 GameObject:
   m_ObjectHideFlags: 0
@@ -6169,7 +6214,7 @@ GameObject:
   - component: {fileID: 1178773057}
   - component: {fileID: 1178773059}
   m_Layer: 0
-  m_Name: CinemachineCamera
+  m_Name: GameCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10424,16 +10469,17 @@ SceneRoots:
   - {fileID: 2037885609}
   - {fileID: 144229415}
   - {fileID: 1178773058}
+  - {fileID: 818243754}
   - {fileID: 1193933869}
   - {fileID: 933188843}
-  - {fileID: 818243754}
   - {fileID: 1649080193}
   - {fileID: 1916751502}
   - {fileID: 746658681}
   - {fileID: 1571247476}
   - {fileID: 1118595526}
-  - {fileID: 301904447}
   - {fileID: 1274685106}
   - {fileID: 1442600607}
   - {fileID: 328480832}
   - {fileID: 800620470}
+  - {fileID: 280309077}
+  - {fileID: 301904447}

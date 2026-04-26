@@ -24,6 +24,11 @@ public class InputManager : MonoBehaviour
 		return actions.Player.Move.ReadValue<Vector2>();
 	}
 
+	public bool GetNewRound()
+	{
+		return actions.Player.Jump.WasPerformedThisFrame();
+	}
+
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{

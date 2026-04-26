@@ -1,5 +1,5 @@
 using System;
-using System.Runtime.CompilerServices;
+using Unity.Cinemachine;
 using UnityEngine;
 
 #pragma warning disable 649
@@ -40,6 +40,9 @@ namespace UnityStandardAssets.Vehicles.Car
 		[SerializeField] private float m_SlipLimit;
 		[SerializeField] private float m_BrakeTorque;
 
+		[SerializeField]
+		private CinemachineCamera FocusCamera;
+
 		private Quaternion[] m_WheelMeshLocalRotations;
 		private Vector3 m_Prevpos, m_Pos;
 		private float m_SteerAngle;
@@ -63,6 +66,8 @@ namespace UnityStandardAssets.Vehicles.Car
 		public float MaxSpeed { get { return m_Topspeed; } }
 		public float Revs { get; private set; }
 		public float AccelInput { get; private set; }
+
+		public CinemachineCamera GetFocusCamera() => FocusCamera;
 
 		public void SetMaxSpeed(float newMaxSpeed)
 		{
@@ -98,10 +103,10 @@ namespace UnityStandardAssets.Vehicles.Car
 		{
 			if (forceWeight > 0 && force > 0f)
 			{
-				m_Rigidbody.AddForce( forceWeight * force * m_Rigidbody.linearVelocity.normalized, ForceMode.Acceleration);
+				m_Rigidbody.AddForce(forceWeight * force * m_Rigidbody.linearVelocity.normalized, ForceMode.Acceleration);
 				forceWeight -= 0.2f;
 
-				if(forceWeight <= 0f)
+				if (forceWeight <= 0f)
 				{
 					forceWeight = -1f;
 					force = -1f;
@@ -161,6 +166,11 @@ namespace UnityStandardAssets.Vehicles.Car
 
 			m_Rigidbody = GetComponent<Rigidbody>();
 			m_CurrentTorque = m_FullTorqueOverAllWheels - (m_TractionControl * m_FullTorqueOverAllWheels);
+
+			if (FocusCamera != null)
+			{
+				FocusCamera.gameObject.SetActive(false);
+			}
 		}
 
 
@@ -220,16 +230,16 @@ namespace UnityStandardAssets.Vehicles.Car
 
 		public void Move(float steering, float accel, float footbrake, float handbrake)
 		{
-			if(!isEnabled)
+			if (!isEnabled)
 			{
-				if(m_Rigidbody != null)
+				if (m_Rigidbody != null)
 				{
 					m_Rigidbody.linearVelocity = Vector3.zero;
 				}
 				return;
 			}
 
-			if(m_Rigidbody == null)
+			if (m_Rigidbody == null)
 			{
 				return;
 			}

@@ -25,6 +25,8 @@ public class ScoreWidget : MonoBehaviour
 		score++;
 	}
 
+	public int GetScore() => score;
+
 	public void SubtractScore()
 	{
 		if (score <= 0)
@@ -43,14 +45,18 @@ public class ScoreWidget : MonoBehaviour
 
 	public void ResetScore()
 	{
-		score = 0;
-		Images.ForEach(image => image.material = EmptyMaterial);
+		score = 5;
+
+		for (int i = 0; i < Images.Count; i++)
+		{
+			Images[i].material = (i < Images.Count / 2) ? scoreMaterial : EmptyMaterial;
+		}
 	}
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
 		scoreMaterial = ScoreMaterial;
-		ResetScore();
+		//ResetScore();
 	}
 }

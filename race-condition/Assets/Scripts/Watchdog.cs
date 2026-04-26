@@ -1,9 +1,11 @@
+using System.Collections;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
 
 public class Watchdog : MonoBehaviour
 {
 	private SplineTrack track;
+	private InputManager inputManager;
 
 	private void OnEnable()
 	{
@@ -26,6 +28,18 @@ public class Watchdog : MonoBehaviour
 	{
 		track.GetClosestPointIndexTo(carController.transform.position, out float index, out float _);
 		//Debug.Log($"point to {carController.name}");
+		StartCoroutine(WaitForUser(index));
+	}
+
+	private IEnumerator WaitForUser(float index)
+	{
+		var endOfFrame = new WaitForEndOfFrame();
+		while (!inputManager.GetNewRound())
+		{
+			yield return endOfFrame;
+		}
+
+		FindAnyObjectByType<CameraTrackingPoint>().ResetGame();
 		FindAnyObjectByType<CarSpawner>().InitCarsInCircuit(index);
 	}
 
@@ -34,6 +48,7 @@ public class Watchdog : MonoBehaviour
 	void Start()
 	{
 		track = FindAnyObjectByType<SplineTrack>();
+		inputManager = FindAnyObjectByType<InputManager>();
 	}
 
 	// Update is called once per frame

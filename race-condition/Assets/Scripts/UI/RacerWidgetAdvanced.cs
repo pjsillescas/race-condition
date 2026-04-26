@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,6 +7,8 @@ using static CameraTrackingPoint;
 
 public class RacerWidgetAdvanced : MonoBehaviour
 {
+	public static event EventHandler<CarController> OnGameWon;
+
 	[SerializeField]
 	private TextMeshProUGUI PlayerText;
 	[SerializeField]
@@ -78,8 +81,13 @@ public class RacerWidgetAdvanced : MonoBehaviour
 	{
 		if (controller.Equals(carController))
 		{
-			Debug.Log($"add score to {controller.name}");
+			//Debug.Log($"add score to {controller.name}");
 			ScoreWidget.AddScore();
+
+			if (ScoreWidget.GetScore() >= 10)
+			{
+				OnGameWon?.Invoke(this, controller);
+			}
 		}
 		else
 		{
