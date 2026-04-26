@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityStandardAssets.Vehicles.Car;
 
 public class Watchdog : MonoBehaviour
@@ -9,17 +10,25 @@ public class Watchdog : MonoBehaviour
 
 	private SplineTrack track;
 	private InputManager inputManager;
+	private bool isGameOver;
 
 	private void OnEnable()
 	{
 		InGameObjectDetector.OnCarEliminated += OnCarEliminated;
 		InGameObjectDetector.OnLastCarStanding += OnLastCarStanding;
+		RacerWidgetAdvanced.OnGameWon += OnGameWon;
 	}
 
 	private void OnDisable()
 	{
 		InGameObjectDetector.OnCarEliminated -= OnCarEliminated;
 		InGameObjectDetector.OnLastCarStanding -= OnLastCarStanding;
+		RacerWidgetAdvanced.OnGameWon -= OnGameWon;
+	}
+
+	private void OnGameWon(object sender, CarController controller)
+	{
+		isGameOver = true;
 	}
 
 	private void OnCarEliminated(object sender, CarController carController)
@@ -42,16 +51,22 @@ public class Watchdog : MonoBehaviour
 			yield return endOfFrame;
 		}
 
-		OnNewRound?.Invoke(this, index);
-
-		//FindAnyObjectByType<CameraTrackingPoint>().ResetGame();
-		//FindAnyObjectByType<CarSpawner>().InitCarsInCircuit(index);
+		if (isGameOver)
+		{
+			SceneManager.LoadScene("MainMenu");
+		}
+		else
+		{
+			OnNewRound?.Invoke(this, index);
+		}
 	}
 
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
+		isGameOver = false;
+
 		track = FindAnyObjectByType<SplineTrack>();
 		inputManager = FindAnyObjectByType<InputManager>();
 	}
