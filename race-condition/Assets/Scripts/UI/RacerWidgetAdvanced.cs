@@ -17,6 +17,8 @@ public class RacerWidgetAdvanced : MonoBehaviour
 	private TextMeshProUGUI PositionText;
 	[SerializeField]
 	private ScoreWidget ScoreWidget;
+	[SerializeField]
+	private WinnerWidget WinnerWidget;
 
 	private CarController carController;
 
@@ -59,13 +61,22 @@ public class RacerWidgetAdvanced : MonoBehaviour
 		while (index < cars.Count && !carFound)
 		{
 			index++;
-			if (index < cars.Count && cars[index].Equals(carController))
+			if (index < cars.Count && cars[index].car.Equals(carController))
 			{
 				carFound = true;
 			}
 		}
 
-		PositionText.text = carFound ? (index + 1).ToString() : "--";
+		if (carFound)
+		{
+			PositionText.text = (cars.Count - index).ToString();
+			LapText.text = cars[index].lap.ToString();
+		}
+		else
+		{
+			PositionText.text = "--";
+			LapText.text = "0";
+		}
 	}
 
 	private void OnCarEliminated(object sender, CarController controller)
@@ -84,6 +95,8 @@ public class RacerWidgetAdvanced : MonoBehaviour
 			//Debug.Log($"add score to {controller.name}");
 			ScoreWidget.AddScore();
 
+			WinnerWidget.Display(controller.GetPlayerData().playerName);
+			
 			if (ScoreWidget.GetScore() >= 10)
 			{
 				OnGameWon?.Invoke(this, controller);

@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
 
 public class Watchdog : MonoBehaviour
 {
+	public static event EventHandler<float> OnNewRound;
+
 	private SplineTrack track;
 	private InputManager inputManager;
 
@@ -39,8 +42,10 @@ public class Watchdog : MonoBehaviour
 			yield return endOfFrame;
 		}
 
-		FindAnyObjectByType<CameraTrackingPoint>().ResetGame();
-		FindAnyObjectByType<CarSpawner>().InitCarsInCircuit(index);
+		OnNewRound?.Invoke(this, index);
+
+		//FindAnyObjectByType<CameraTrackingPoint>().ResetGame();
+		//FindAnyObjectByType<CarSpawner>().InitCarsInCircuit(index);
 	}
 
 

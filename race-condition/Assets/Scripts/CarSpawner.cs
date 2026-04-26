@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -15,6 +16,23 @@ public class CarSpawner : MonoBehaviour
 	private List<CarController> spawnedCars;
 
 	private SplineTrack circuit;
+
+	private void OnEnable()
+	{
+		Watchdog.OnNewRound += OnNewRound;
+	}
+
+	private void OnDisable()
+	{
+		Watchdog.OnNewRound -= OnNewRound;
+	}
+
+	private void OnNewRound(object sender, float index)
+	{
+		InitCarsInCircuit(index);
+	}
+
+
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{

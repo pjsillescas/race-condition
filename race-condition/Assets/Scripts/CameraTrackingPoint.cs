@@ -27,11 +27,18 @@ public class CameraTrackingPoint : MonoBehaviour
 	private void OnEnable()
 	{
 		Checkpoint.OnEndLap += OnControllerEndLap;
+		Watchdog.OnNewRound += OnNewRound;
 	}
 
 	private void OnDisable()
 	{
 		Checkpoint.OnEndLap += OnControllerEndLap;
+		Watchdog.OnNewRound -= OnNewRound;
+	}
+
+	private void OnNewRound(object sender, float e)
+	{
+		ResetGame();
 	}
 
 	private void OnControllerEndLap(object sender, CarController controller)
