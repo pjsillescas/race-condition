@@ -28,12 +28,14 @@ public class CameraTrackingPoint : MonoBehaviour
 	{
 		Checkpoint.OnEndLap += OnControllerEndLap;
 		Watchdog.OnNewRound += OnNewRound;
+		CarController.OnCarSpawned += OnCarSpawned;
 	}
 
 	private void OnDisable()
 	{
-		Checkpoint.OnEndLap += OnControllerEndLap;
+		Checkpoint.OnEndLap -= OnControllerEndLap;
 		Watchdog.OnNewRound -= OnNewRound;
+		CarController.OnCarSpawned -= OnCarSpawned;
 	}
 
 	private void OnNewRound(object sender, float e)
@@ -56,8 +58,8 @@ public class CameraTrackingPoint : MonoBehaviour
 		circuit = FindAnyObjectByType<SplineTrack>();
 		cameraManager = FindAnyObjectByType<CameraManager>();
 		
-		cars = null;
-		StartCoroutine(DetectCars());
+		cars = new();
+		//StartCoroutine(DetectCars());
 
 		ResetGame();
 	}
@@ -70,13 +72,18 @@ public class CameraTrackingPoint : MonoBehaviour
 
 	private IEnumerator DetectCars()
 	{
-		yield return new WaitForSeconds(0.3f);
+		yield return new WaitForSeconds(0.5f);
 
 		cars = new List<CarController>(FindObjectsByType<CarController>()) //
 			.Select(controller => new CarTrackingDataDTO() { car = controller, sortScore = 0f, lap = 0, }) //
 			.ToList();
 	}
 	
+	private void OnCarSpawned(object sender, CarController controller)
+	{
+		cars.Add(new CarTrackingDataDTO() { car = controller, sortScore = 0f, lap = 0, });
+	}
+
 	private List<CarTrackingDataDTO> SortCars()
 	{
 		var activeCars = cars.Where(data => data.car.GetIsEnabled()).ToList();

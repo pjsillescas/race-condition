@@ -21,6 +21,8 @@ namespace UnityStandardAssets.Vehicles.Car
 	[RequireComponent(typeof(Rigidbody))]
 	public class CarController : MonoBehaviour
 	{
+		public static event EventHandler<CarController> OnCarSpawned;
+
 		[SerializeField] private CarDriveType m_CarDriveType = CarDriveType.FourWheelDrive;
 		[SerializeField] private WheelCollider[] m_WheelColliders = new WheelCollider[4];
 		[SerializeField] private GameObject[] m_WheelMeshes = new GameObject[4];
@@ -138,6 +140,8 @@ namespace UnityStandardAssets.Vehicles.Car
 			SetMaterial(data.material);
 
 			gameObject.GetComponent<CarSpeedController>().Setup(data.maxSpeedOutOfTrack, data.maxSpeedInTrack);
+
+			OnCarSpawned?.Invoke(this, this);
 		}
 
 		private void SetMaterial(Material material)
