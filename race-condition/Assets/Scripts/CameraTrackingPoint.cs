@@ -70,7 +70,7 @@ public class CameraTrackingPoint : MonoBehaviour
 
 	private IEnumerator DetectCars()
 	{
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(0.3f);
 
 		cars = new List<CarController>(FindObjectsByType<CarController>()) //
 			.Select(controller => new CarTrackingDataDTO() { car = controller, sortScore = 0f, lap = 0, }) //
