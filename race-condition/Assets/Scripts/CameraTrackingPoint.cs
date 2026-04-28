@@ -6,6 +6,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
 
+[RequireComponent(typeof(BoxCollider))]
 public class CameraTrackingPoint : MonoBehaviour
 {
 	public static event EventHandler<List<CarTrackingDataDTO>> OnCarSorted;
@@ -23,6 +24,9 @@ public class CameraTrackingPoint : MonoBehaviour
 	private List<CarTrackingDataDTO> cars;
 	private SplineTrack circuit;
 	private CameraManager cameraManager;
+	private BoxCollider boxCollider;
+	private Vector3 boxColliderCenter;
+	private Vector3 oldPosition;
 
 	private void OnEnable()
 	{
@@ -51,13 +55,28 @@ public class CameraTrackingPoint : MonoBehaviour
 		SortCars();
 	}
 
+#if UNITY_EDITOR
+	private void OnDrawGizmosSelected()
+	{
+		if (Application.isPlaying)
+		{
+			Gizmos.DrawWireCube(transform.position + boxCollider.center, 65f * Vector3.one);
+
+			Gizmos.DrawSphere(boxCollider.center + transform.position, 2f);
+		}
+	}
+#endif
+
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
 		circuit = FindAnyObjectByType<SplineTrack>();
 		cameraManager = FindAnyObjectByType<CameraManager>();
-		
+		boxCollider = GetComponent<BoxCollider>();
+		boxColliderCenter = boxCollider.center;
+		oldPosition = Vector3.zero;
+
 		cars = new();
 		//StartCoroutine(DetectCars());
 
@@ -158,6 +177,11 @@ public class CameraTrackingPoint : MonoBehaviour
 		}
 
 		var currentPosition = GetCurrentPosition();
-		transform.position = circuit.GetClosestPointTo(currentPosition);
+		var position = circuit.GetClosestPointTo(currentPosition);
+		var direction = position - oldPosition;
+		oldPosition = position;
+		transform.position = position;
+
+		boxCollider.center = boxColliderCenter + direction * 5f;
 	}
 }
