@@ -103,7 +103,8 @@ public class CarSpawner : MonoBehaviour
 				aiControl.SetCurrentT(t);
 			}
 
-			StartCoroutine(EnableCarCoroutine(car));
+			//StartCoroutine(EnableCarCoroutine(car));
+			car.Enable();
 		}
 	}
 

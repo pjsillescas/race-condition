@@ -93,6 +93,27 @@ namespace UnityStandardAssets.Vehicles.Car
 		{
 			// Debug.Log($"enable {name}");
 			isEnabled = true;
+
+			// Reset current torque to initial value
+			m_CurrentTorque = m_FullTorqueOverAllWheels - (m_TractionControl * m_FullTorqueOverAllWheels);
+			
+			// reset wheel torques
+			if(m_WheelColliders != null)
+			{
+				for(int i = 0;i<m_WheelColliders.Length;i++)
+				{
+					m_WheelColliders[i].motorTorque = 0;
+					m_WheelColliders[i].brakeTorque = 0;
+				}
+			}
+
+			// Wake up and reset rigid body
+			if(m_Rigidbody != null)
+			{
+				m_Rigidbody.linearVelocity = Vector3.zero;
+				m_Rigidbody.angularVelocity = Vector3.zero;
+				m_Rigidbody.WakeUp();
+			}
 		}
 
 		public void Disable()
@@ -457,9 +478,14 @@ namespace UnityStandardAssets.Vehicles.Car
 
 		private void AdjustTorque(float forwardSlip)
 		{
+			/*
 			if (forwardSlip >= m_SlipLimit && m_CurrentTorque >= 0)
 			{
 				m_CurrentTorque -= 10 * m_TractionControl;
+				if(m_CurrentTorque < 0)
+				{
+					m_CurrentTorque = 0; // prevent negative torque
+				}
 			}
 			else
 			{
@@ -469,6 +495,17 @@ namespace UnityStandardAssets.Vehicles.Car
 					m_CurrentTorque = m_FullTorqueOverAllWheels;
 				}
 			}
+			*/
+			if (forwardSlip >= m_SlipLimit && m_CurrentTorque >= 0)
+			{
+				m_CurrentTorque -= 10 * m_TractionControl;
+			}
+			else
+			{
+				m_CurrentTorque += 10 * m_TractionControl;
+			}
+			m_CurrentTorque = Mathf.Clamp(m_CurrentTorque, 0, m_FullTorqueOverAllWheels);
+
 		}
 
 
