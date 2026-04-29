@@ -168,6 +168,9 @@ public class CameraTrackingPoint : MonoBehaviour
 		return weight;
 	}
 
+	//const float COLLIDER_OFFSET = 5f;
+	const float COLLIDER_OFFSET = 10f;
+
 	// Update is called once per frame
 	void Update()
 	{
@@ -182,6 +185,6 @@ public class CameraTrackingPoint : MonoBehaviour
 		oldPosition = position;
 		transform.position = position;
 
-		boxCollider.center = boxColliderCenter + direction * 5f;
+		boxCollider.center = boxColliderCenter + direction * COLLIDER_OFFSET;
 	}
 }
