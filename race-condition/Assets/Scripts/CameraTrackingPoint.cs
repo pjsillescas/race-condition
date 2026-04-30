@@ -75,7 +75,7 @@ public class CameraTrackingPoint : MonoBehaviour
 		cameraManager = FindAnyObjectByType<CameraManager>();
 		boxCollider = GetComponent<BoxCollider>();
 		boxColliderCenter = boxCollider.center;
-		oldPosition = Vector3.zero;
+		oldPosition = circuit.GetClosestPointTo(Vector3.zero);
 
 		cars = new();
 		//StartCoroutine(DetectCars());
@@ -169,7 +169,7 @@ public class CameraTrackingPoint : MonoBehaviour
 	}
 
 	//const float COLLIDER_OFFSET = 5f;
-	const float COLLIDER_OFFSET = 10f;
+	const float COLLIDER_OFFSET = 7f;
 
 	// Update is called once per frame
 	void Update()
@@ -181,7 +181,7 @@ public class CameraTrackingPoint : MonoBehaviour
 
 		var currentPosition = GetCurrentPosition();
 		var position = circuit.GetClosestPointTo(currentPosition);
-		var direction = position - oldPosition;
+		var direction = (position - oldPosition).normalized;
 		oldPosition = position;
 		transform.position = position;
 
