@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d9eb9dd5efe97409c3c8ce60eb5d48, type: 3}
+  m_Name: DefaultCar2
+  m_EditorClassIdentifier: Assembly-CSharp::CarDataSO
+  carName: Debug IA2
+  maxSpeedInTrack: 150
+  maxSpeedOutOfTrack: 75
+  CentreOfMassOffset: {x: 0, y: 0, z: 0}
+  MaximumSteerAngle: 25
+  SteerHelper: 0.644
+  TractionControl: 1
+  FullTorqueOverAllWheels: 2500
+  ReverseTorque: 500
+  MaxHandbrakeTorque: 100000000
+  Downforce: 100
+  SpeedType: 0
+  Topspeed: 150
+  RevRangeBoundary: 1
+  SlipLimit: 0.3
+  BrakeTorque: 20000
+  material: {fileID: 2100000, guid: 03a171f9840600c4b9c990231e6e9651, type: 2}

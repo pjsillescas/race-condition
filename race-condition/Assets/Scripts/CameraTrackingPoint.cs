@@ -157,10 +157,12 @@ public class CameraTrackingPoint : MonoBehaviour
 	{
 		var weights2 = new float[] { 0.5f, 1.5f };
 		var weights3 = new float[] { 0.4f, 0.8f, 1.8f };
+		var weights4 = new float[] { 0.2f, 0.3f, 0.5f, 2.5f };
 
 		float weight;
 		weight = count switch
 		{
+			4 => weights4[index],
 			3 => weights3[index],
 			2 => weights2[index],
 			_ => 1f,

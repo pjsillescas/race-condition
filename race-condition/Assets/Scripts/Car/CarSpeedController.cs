@@ -21,11 +21,13 @@ public class CarSpeedController : MonoBehaviour
 	void Start()
 	{
 		controller = GetComponent<CarController>();
-		isOutOfTrack = false;
+		isOutOfTrack = true;
 	}
 
 	public void Setup(float MaxSpeedOutOfTrack, float MaxSpeedInTrack)
 	{
+
+		Debug.Log($"intrack {MaxSpeedInTrack} offtrack {MaxSpeedOutOfTrack}");
 		this.MaxSpeedInTrack = MaxSpeedInTrack;
 		this.MaxSpeedOutOfTrack = MaxSpeedOutOfTrack;
 	}
@@ -54,20 +56,24 @@ public class CarSpeedController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (IsOutOfTrack())
+		var thisOutOfTrack = IsOutOfTrack();
+		//Debug.Log($"{name} prevoutoftrack {isOutOfTrack} thisoutoftrack {thisOutOfTrack}");
+		if (thisOutOfTrack)
 		{
 			if (!isOutOfTrack)
 			{
-				isOutOfTrack = true;
-				controller.SetMaxSpeed(MaxSpeedOutOfTrack);
+				Debug.Log("in track");
+				isOutOfTrack = false;
+				controller.SetMaxSpeed(MaxSpeedInTrack);
 			}
 		}
 		else
 		{
 			if (isOutOfTrack)
 			{
-				isOutOfTrack = false;
-				controller.SetMaxSpeed(MaxSpeedInTrack);
+				Debug.Log("out of track");
+				isOutOfTrack = true;
+				controller.SetMaxSpeed(MaxSpeedOutOfTrack);
 			}
 		}
 	}

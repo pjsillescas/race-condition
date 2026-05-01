@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f03a9a94d14803408246f22e69c1999, type: 3}
-  m_Name: DebugAI2
+  m_Name: DebugAI3
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDataSO
   playerName: AI2
   isIA: 1
-  carData: {fileID: 11400000, guid: 2966d2f78df7cfc4aa6e48c8faedbcde, type: 2}
-  scoreMaterial: {fileID: 2100000, guid: 03a171f9840600c4b9c990231e6e9651, type: 2}
+  carData: {fileID: 11400000, guid: ec45f843c67afa242a5a3501322b04bc, type: 2}
+  scoreMaterial: {fileID: 2100000, guid: 88da9eaf7ccb3754eb2c1f9a30bbd82e, type: 2}

@@ -90,9 +90,15 @@ public class CarSpawner : MonoBehaviour
 		var carCount = spawnedCars.Count;
 		for (int i = 0; i < carCount; i++)
 		{
-			float lateralOffset = (i - carCount / 2f) * 3f + 2f;
+			var leftOffset = i % 2 == 0 ? 0 : 1;
+			float lateralOffset = (leftOffset - carCount / 2f) * 4f + 6f;
 			Vector3 right = Vector3.Cross(tangent, Vector3.up).normalized;
-			var spawnPosition = spawnPos + right * lateralOffset;
+
+
+			int frontOffset = - (i / 2);
+			float frontalOffset = frontOffset * 8f;
+			Vector3 front = tangent.normalized;
+			var spawnPosition = spawnPos + right * lateralOffset + frontalOffset * front;
 
 			var car = spawnedCars[i];
 			car.transform.SetPositionAndRotation(spawnPosition, spawnRot);
