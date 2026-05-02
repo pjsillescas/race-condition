@@ -156,8 +156,8 @@ public class CameraTrackingPoint : MonoBehaviour
 	private float GetWeight(int index, int count)
 	{
 		var weights2 = new float[] { 0.5f, 1.5f };
-		var weights3 = new float[] { 0.4f, 0.8f, 1.8f };
-		var weights4 = new float[] { 0.2f, 0.3f, 0.5f, 2.5f };
+		var weights3 = new float[] { 0.3f, 0.5f, 2.2f };
+		var weights4 = new float[] { 0.1f, 0.3f, 0.4f, 3.2f };
 
 		float weight;
 		weight = count switch
