@@ -45,7 +45,7 @@ public class InGameObjectDetector : MonoBehaviour
 			if (cars.Count == 1)
 			{
 				var lastCar = cars.First();
-				lastCar.Disable();
+				lastCar.Disable(false);
 				var camera = lastCar.GetFocusCamera();
 				cameraManager.SetCamera(camera);
 				Debug.Log($"{lastCar.name} wins round");

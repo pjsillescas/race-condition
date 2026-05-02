@@ -56,6 +56,7 @@ namespace UnityStandardAssets.Vehicles.Car
 		private const float k_ReversingThreshold = 0.01f;
 
 		private PlayerDataSO playerData;
+		private Transform disabledPosition;
 		[SerializeField]
 		private bool isEnabled = true;
 		private float forceWeight = -1f;
@@ -91,6 +92,8 @@ namespace UnityStandardAssets.Vehicles.Car
 
 		public void Enable()
 		{
+			//gameObject.SetActive(true);
+
 			// Debug.Log($"enable {name}");
 			isEnabled = true;
 
@@ -118,8 +121,18 @@ namespace UnityStandardAssets.Vehicles.Car
 
 		public void Disable()
 		{
+			Disable(true);
+		}
+
+		public void Disable(bool moveToDisabledPosition)
+		{
 			// Debug.Log($"disable {name}");
 			isEnabled = false;
+			if (disabledPosition != null && moveToDisabledPosition)
+			{
+				transform.SetPositionAndRotation(disabledPosition.position, disabledPosition.rotation);
+			}
+			//gameObject.SetActive(false);
 		}
 
 		private void FixedUpdate()
@@ -138,9 +151,10 @@ namespace UnityStandardAssets.Vehicles.Car
 		}
 
 		public PlayerDataSO GetPlayerData() => playerData;
-		public void Setup(PlayerDataSO playerData)
+		public void Setup(PlayerDataSO playerData, Transform disabledPosition)
 		{
 			this.playerData = playerData;
+			this.disabledPosition = disabledPosition;
 			var data = playerData.carData;
 			//Debug.Log($"init {playerData.playerName}");
 

@@ -1,8 +1,5 @@
-using JetBrains.Annotations;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
 
@@ -12,6 +9,8 @@ public class CarSpawner : MonoBehaviour
 	private GameObject PlayerCarPrefab;
 	[SerializeField]
 	private GameObject AICarPrefab;
+	[SerializeField]
+	private List<Transform> DisabledPositions;
 
 	private List<CarController> spawnedCars;
 
@@ -66,7 +65,7 @@ public class CarSpawner : MonoBehaviour
 
 			var carName = playerData.isIA ? "ai" : "player";
 			car.name = $"{carName}_{i}";
-			car.Setup(playerData);
+			car.Setup(playerData, DisabledPositions[i]);
 			
 			if(car.TryGetComponent(out CircuitAIControl aiControl))
 			{
