@@ -41,6 +41,11 @@ public class TrafficLightController : MonoBehaviour
 	[SerializeField]
 	private Material greenOffMaterial;
 
+	[SerializeField]
+	private AudioSource beepLow;
+	[SerializeField]
+	private AudioSource beepHigh;
+
 	public void Enable()
 	{
 		gameObject.SetActive(true);
@@ -83,16 +88,19 @@ public class TrafficLightController : MonoBehaviour
 				SetLight(redLightRenderer, redOnMaterial);
 				SetLight(yellowLightRenderer, yellowOffMaterial);
 				SetLight(greenLightRenderer, greenOffMaterial);
+				beepLow.Play();
 				break;
 			case LightState.Yellow:
 				SetLight(redLightRenderer, redOffMaterial);
 				SetLight(yellowLightRenderer, yellowOnMaterial);
 				SetLight(greenLightRenderer, greenOffMaterial);
+				beepLow.Play();
 				break;
 			case LightState.Green:
 				SetLight(redLightRenderer, redOffMaterial);
 				SetLight(yellowLightRenderer, yellowOffMaterial);
 				SetLight(greenLightRenderer, greenOnMaterial);
+				beepHigh.Play();
 				break;
 			case LightState.Off:
 				SetLightsOff();
