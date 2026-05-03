@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
@@ -15,14 +15,17 @@ public class CarSpawner : MonoBehaviour
 	private List<CarController> spawnedCars;
 
 	private SplineTrack circuit;
+	private TrafficLightController trafficLight;
 
 	private void OnEnable()
 	{
+		TrafficLightController.OnRoundStarted += OnRoundStarted;
 		Watchdog.OnNewRound += OnNewRound;
 	}
 
 	private void OnDisable()
 	{
+		TrafficLightController.OnRoundStarted -= OnRoundStarted;
 		Watchdog.OnNewRound -= OnNewRound;
 	}
 
@@ -37,6 +40,9 @@ public class CarSpawner : MonoBehaviour
 	{
 		spawnedCars = new();
 		circuit = FindAnyObjectByType<SplineTrack>();
+
+		trafficLight = FindAnyObjectByType<TrafficLightController>();
+		trafficLight.Disable();
 
 		var gameData = FindAnyObjectByType<GameData>();
 
@@ -66,8 +72,8 @@ public class CarSpawner : MonoBehaviour
 			var carName = playerData.isIA ? "ai" : "player";
 			car.name = $"{carName}_{i}";
 			car.Setup(playerData, DisabledPositions[i]);
-			
-			if(car.TryGetComponent(out CircuitAIControl aiControl))
+
+			if (car.TryGetComponent(out CircuitAIControl aiControl))
 			{
 				aiControl.SetCircuit(circuit, i - 1);
 				aiControl.ResetToStart();
@@ -94,7 +100,7 @@ public class CarSpawner : MonoBehaviour
 			Vector3 right = Vector3.Cross(tangent, Vector3.up).normalized;
 
 
-			int frontOffset = - (i / 2);
+			int frontOffset = -(i / 2);
 			float frontalOffset = frontOffset * 8f;
 			Vector3 front = tangent.normalized;
 			var spawnPosition = spawnPos + right * lateralOffset + frontalOffset * front;
@@ -103,22 +109,26 @@ public class CarSpawner : MonoBehaviour
 			car.transform.SetPositionAndRotation(spawnPosition, spawnRot);
 
 			var aiControl = car.GetComponent<CircuitAIControl>();
-			if(aiControl != null)
+			if (aiControl != null)
 			{
 				aiControl.SetCurrentT(t);
 			}
 
-			//StartCoroutine(EnableCarCoroutine(car));
 			car.Enable();
 		}
+
+		//raceStartManager.StartNewRound(EnableCars);
+		if (trafficLight != null)
+		{
+			trafficLight.Enable();
+			trafficLight.StartTrafficSequence();
+		}
+
 	}
 
-	private IEnumerator EnableCarCoroutine(CarController car)
+	private void OnRoundStarted(object sender, EventArgs args)
 	{
-		car.Disable();
-		
-		yield return new WaitForSeconds(0.5f);
-		
-		car.Enable();
+		spawnedCars.ForEach(car => car.EnableMovement());
+		trafficLight.Disable();
 	}
 }

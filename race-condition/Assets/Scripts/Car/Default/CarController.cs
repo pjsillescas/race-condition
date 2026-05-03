@@ -59,6 +59,7 @@ namespace UnityStandardAssets.Vehicles.Car
 		private Transform disabledPosition;
 		[SerializeField]
 		private bool isEnabled = true;
+		private bool isEnabledMovement = true;
 		private float forceWeight = -1f;
 		private float force = -1f;
 
@@ -89,21 +90,17 @@ namespace UnityStandardAssets.Vehicles.Car
 		}
 
 		public bool GetIsEnabled() => isEnabled;
+		public bool GetIsEnabledMovement() => isEnabledMovement;
 
-		public void Enable()
+		private void EnablePhysics()
 		{
-			//gameObject.SetActive(true);
-
-			// Debug.Log($"enable {name}");
-			isEnabled = true;
-
 			// Reset current torque to initial value
 			m_CurrentTorque = m_FullTorqueOverAllWheels - (m_TractionControl * m_FullTorqueOverAllWheels);
-			
+
 			// reset wheel torques
-			if(m_WheelColliders != null)
+			if (m_WheelColliders != null)
 			{
-				for(int i = 0;i<m_WheelColliders.Length;i++)
+				for (int i = 0; i < m_WheelColliders.Length; i++)
 				{
 					m_WheelColliders[i].motorTorque = 0;
 					m_WheelColliders[i].brakeTorque = 0;
@@ -111,12 +108,27 @@ namespace UnityStandardAssets.Vehicles.Car
 			}
 
 			// Wake up and reset rigid body
-			if(m_Rigidbody != null)
+			if (m_Rigidbody != null)
 			{
 				m_Rigidbody.linearVelocity = Vector3.zero;
 				m_Rigidbody.angularVelocity = Vector3.zero;
 				m_Rigidbody.WakeUp();
 			}
+		}
+
+		private void DisablePhysics(bool moveToDisabledPosition)
+		{
+			if (disabledPosition != null && moveToDisabledPosition)
+			{
+				transform.SetPositionAndRotation(disabledPosition.position, disabledPosition.rotation);
+			}
+		}
+
+		public void Enable()
+		{
+			// Debug.Log($"enable {name}");
+			isEnabled = true;
+			EnablePhysics();
 		}
 
 		public void Disable()
@@ -128,11 +140,13 @@ namespace UnityStandardAssets.Vehicles.Car
 		{
 			// Debug.Log($"disable {name}");
 			isEnabled = false;
-			if (disabledPosition != null && moveToDisabledPosition)
-			{
-				transform.SetPositionAndRotation(disabledPosition.position, disabledPosition.rotation);
-			}
-			//gameObject.SetActive(false);
+			isEnabledMovement = false;
+			DisablePhysics(moveToDisabledPosition);
+		}
+
+		public void EnableMovement()
+		{
+			isEnabledMovement = true;
 		}
 
 		private void FixedUpdate()
@@ -269,7 +283,7 @@ namespace UnityStandardAssets.Vehicles.Car
 
 		public void Move(float steering, float accel, float footbrake, float handbrake)
 		{
-			if (!isEnabled)
+			if (!isEnabledMovement)
 			{
 				if (m_Rigidbody != null)
 				{
@@ -285,11 +299,8 @@ namespace UnityStandardAssets.Vehicles.Car
 
 			for (int i = 0; i < 4; i++)
 			{
-				Quaternion quat;
-				Vector3 position;
-				m_WheelColliders[i].GetWorldPose(out position, out quat);
-				m_WheelMeshes[i].transform.position = position;
-				m_WheelMeshes[i].transform.rotation = quat;
+				m_WheelColliders[i].GetWorldPose(out Vector3 position, out Quaternion quat);
+				m_WheelMeshes[i].transform.SetPositionAndRotation(position, quat);
 			}
 
 			//clamp input values
@@ -393,8 +404,7 @@ namespace UnityStandardAssets.Vehicles.Car
 		{
 			for (int i = 0; i < 4; i++)
 			{
-				WheelHit wheelhit;
-				m_WheelColliders[i].GetGroundHit(out wheelhit);
+				m_WheelColliders[i].GetGroundHit(out WheelHit wheelhit);
 				if (wheelhit.normal == Vector3.zero)
 					return; // wheels arent on the ground so dont realign the rigidbody velocity
 			}
@@ -413,8 +423,7 @@ namespace UnityStandardAssets.Vehicles.Car
 		// this is used to add more grip in relation to speed
 		private void AddDownForce()
 		{
-			m_WheelColliders[0].attachedRigidbody.AddForce(-transform.up * m_Downforce *
-														 m_WheelColliders[0].attachedRigidbody.linearVelocity.magnitude);
+			m_WheelColliders[0].attachedRigidbody.AddForce(-m_Downforce * m_WheelColliders[0].attachedRigidbody.linearVelocity.magnitude * transform.up);
 		}
 
 
@@ -428,8 +437,7 @@ namespace UnityStandardAssets.Vehicles.Car
 			// loop through all wheels
 			for (int i = 0; i < 4; i++)
 			{
-				WheelHit wheelHit;
-				m_WheelColliders[i].GetGroundHit(out wheelHit);
+				m_WheelColliders[i].GetGroundHit(out WheelHit wheelHit);
 
 				// is the tire slipping above the given threshhold
 				if (Mathf.Abs(wheelHit.forwardSlip) >= m_SlipLimit || Mathf.Abs(wheelHit.sidewaysSlip) >= m_SlipLimit)
