@@ -48,7 +48,24 @@ namespace UnityStandardAssets.Vehicles.Car
 		private AudioSource m_HighDecel; // Source for the high deceleration sounds
 		private bool m_StartedSound; // flag for knowing if we have started sounds
 		private CarController m_CarController; // Reference to car we are controlling
+		private bool isSoundEnabled = true;
 
+
+		public void DisableSound()
+		{
+			isSoundEnabled = false;
+
+			m_LowAccel.volume = 0;
+			m_LowDecel.volume = 0;
+			m_HighAccel.volume = 0;
+			m_HighDecel.volume = 0;
+		}
+
+		public void EnableSound()
+		{
+			isSoundEnabled = true;
+			;
+		}
 
 		private void StartSound()
 		{
@@ -86,6 +103,11 @@ namespace UnityStandardAssets.Vehicles.Car
 		// Update is called once per frame
 		private void Update()
 		{
+			if (!isSoundEnabled)
+			{
+				return;
+			}
+
 			// get the distance to main camera
 			float camDist = (Camera.main.transform.position - transform.position).sqrMagnitude;
 

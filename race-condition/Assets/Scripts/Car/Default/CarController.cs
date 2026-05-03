@@ -17,8 +17,9 @@ namespace UnityStandardAssets.Vehicles.Car
 		MPH,
 		KPH
 	}
+[RequireComponent(typeof(Rigidbody))]
 
-	[RequireComponent(typeof(Rigidbody))]
+	[RequireComponent(typeof(CarAudio))]
 	public class CarController : MonoBehaviour
 	{
 		public static event EventHandler<CarController> OnCarSpawned;
@@ -62,6 +63,7 @@ namespace UnityStandardAssets.Vehicles.Car
 		private bool isEnabledMovement = true;
 		private float forceWeight = -1f;
 		private float force = -1f;
+		private CarAudio carAudio;
 
 		public bool Skidding { get; private set; }
 		public float BrakeInput { get; private set; }
@@ -131,6 +133,12 @@ namespace UnityStandardAssets.Vehicles.Car
 			EnablePhysics();
 		}
 
+		public void EnableMovement()
+		{
+			isEnabledMovement = true;
+			carAudio.EnableSound();
+		}
+
 		public void Disable()
 		{
 			Disable(true);
@@ -142,11 +150,10 @@ namespace UnityStandardAssets.Vehicles.Car
 			isEnabled = false;
 			isEnabledMovement = false;
 			DisablePhysics(moveToDisabledPosition);
-		}
-
-		public void EnableMovement()
-		{
-			isEnabledMovement = true;
+			if(carAudio != null)
+			{
+				carAudio.DisableSound();
+			}
 		}
 
 		private void FixedUpdate()
@@ -208,6 +215,8 @@ namespace UnityStandardAssets.Vehicles.Car
 		// Use this for initialization
 		private void Start()
 		{
+			carAudio = GetComponent<CarAudio>();
+
 			m_WheelMeshLocalRotations = new Quaternion[4];
 			for (int i = 0; i < 4; i++)
 			{
