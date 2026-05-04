@@ -7,7 +7,6 @@ using UnityStandardAssets.Vehicles.Car;
 
 public class InGameObjectDetector : MonoBehaviour
 {
-	public static event EventHandler<List<CarController>> OnCarsDetected;
 	public static event EventHandler<CarController> OnCarEliminated;
 	public static event EventHandler<CarController> OnLastCarStanding;
 
@@ -25,7 +24,6 @@ public class InGameObjectDetector : MonoBehaviour
 	{
 		yield return new WaitForSeconds(0.5f);
 		ResetComponent();
-		OnCarsDetected?.Invoke(this, cars);
 	}
 
 	private void ResetComponent()

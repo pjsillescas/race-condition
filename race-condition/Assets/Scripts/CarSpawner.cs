@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
 
 public class CarSpawner : MonoBehaviour
 {
+	public static event EventHandler<List<CarController>> OnCarsDetected;
+
 	[SerializeField]
 	private GameObject PlayerCarPrefab;
 	[SerializeField]
@@ -65,9 +68,19 @@ public class CarSpawner : MonoBehaviour
 		{
 			var playerData = playersData[i];
 
-			var carPrefab = playerData.isIA ? AICarPrefab : PlayerCarPrefab;
+			//var carPrefab = playerData.isIA ? AICarPrefab : PlayerCarPrefab;
+			var carPrefab = playerData.carData.CarPrefab;
 			CarController car = Instantiate(carPrefab, Vector3.zero, Quaternion.identity).GetComponent<CarController>();
 			car.Disable();
+
+			if (playerData.isIA)
+			{
+				car.AddComponent<CircuitAIControl>();
+			}
+			else
+			{
+				car.AddComponent<PecCarUserControl>();
+			}
 
 			var carName = playerData.isIA ? "ai" : "player";
 			car.name = $"{carName}_{i}";
@@ -84,6 +97,8 @@ public class CarSpawner : MonoBehaviour
 
 		// place cars
 		InitCarsInCircuit(0f);
+
+		OnCarsDetected?.Invoke(this, spawnedCars);
 	}
 
 	public void InitCarsInCircuit(float t)

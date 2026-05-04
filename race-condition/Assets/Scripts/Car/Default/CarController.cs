@@ -195,7 +195,10 @@ namespace UnityStandardAssets.Vehicles.Car
 
 			SetMaterial(data.material);
 
-			gameObject.GetComponent<CarSpeedController>().Setup(data.maxSpeedOutOfTrack, data.maxSpeedInTrack);
+			if (gameObject.TryGetComponent(out CarSpeedController speedController))
+			{
+				speedController.Setup(data.maxSpeedOutOfTrack, data.maxSpeedInTrack);
+			}
 
 			OnCarSpawned?.Invoke(this, this);
 		}

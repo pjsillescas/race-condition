@@ -29,3 +29,4 @@ MonoBehaviour:
   SlipLimit: 0.3
   BrakeTorque: 20000
   material: {fileID: 2100000, guid: 374ce4b88acfd384e961aae040c49b31, type: 2}
+  CarPrefab: {fileID: 8520081248412799558, guid: dad62c7e91fe08f46b6786b065baff7b, type: 3}

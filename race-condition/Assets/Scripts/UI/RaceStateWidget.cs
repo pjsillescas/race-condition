@@ -9,12 +9,12 @@ public class RaceStateWidget : MonoBehaviour
 
 	private void OnEnable()
 	{
-		InGameObjectDetector.OnCarsDetected += OnCarsDetected;
+		CarSpawner.OnCarsDetected += OnCarsDetected;
 	}
 
 	private void OnDisable()
 	{
-		InGameObjectDetector.OnCarsDetected -= OnCarsDetected;
+		CarSpawner.OnCarsDetected -= OnCarsDetected;
 	}
 
 	private void OnCarsDetected(object sender, List<CarController> cars)

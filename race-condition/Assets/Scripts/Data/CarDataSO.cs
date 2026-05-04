@@ -24,4 +24,5 @@ public class CarDataSO : ScriptableObject
 	public float SlipLimit = 0.3f;
 	public float BrakeTorque = 20000f;
 	public Material material;
+	public GameObject CarPrefab;
 }

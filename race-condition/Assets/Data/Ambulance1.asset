@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4d9eb9dd5efe97409c3c8ce60eb5d48, type: 3}
-  m_Name: DefaultCar3
+  m_Name: Ambulance1
   m_EditorClassIdentifier: Assembly-CSharp::CarDataSO
-  carName: Debug IA2
-  maxSpeedInTrack: 150
+  carName: Ambulance1
+  maxSpeedInTrack: 200
   maxSpeedOutOfTrack: 75
   CentreOfMassOffset: {x: 0, y: 0, z: 0}
   MaximumSteerAngle: 25
@@ -28,5 +28,5 @@ MonoBehaviour:
   RevRangeBoundary: 1
   SlipLimit: 0.3
   BrakeTorque: 20000
-  material: {fileID: 2100000, guid: 92b4782adce3b8848abb050b33d214a3, type: 2}
-  CarPrefab: {fileID: 8520081248412799558, guid: dad62c7e91fe08f46b6786b065baff7b, type: 3}
+  material: {fileID: 0}
+  CarPrefab: {fileID: 8440651725544075767, guid: 5dd6a0a527c18b946affaaac814870f2, type: 3}
