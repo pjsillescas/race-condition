@@ -10,6 +10,9 @@ public class InGameObjectDetector : MonoBehaviour
 	public static event EventHandler<CarController> OnCarEliminated;
 	public static event EventHandler<CarController> OnLastCarStanding;
 
+	[SerializeField]
+	private GameObject ExplosionPrefab;
+
 	private List<CarController> cars;
 	private CameraManager cameraManager;
 
@@ -36,8 +39,14 @@ public class InGameObjectDetector : MonoBehaviour
 		var controller = other.gameObject.GetComponentInParent<CarController>();
 		if (controller != null && controller.GetIsEnabled())
 		{
+			if (ExplosionPrefab != null)
+			{
+				Instantiate(ExplosionPrefab, controller.transform.position, Quaternion.identity);
+			}
+			
 			controller.Disable();
 			cars.Remove(controller);
+
 			OnCarEliminated?.Invoke(this, controller);
 
 			if (cars.Count == 1)
