@@ -56,6 +56,7 @@ public class RacerWidgetAdvanced : MonoBehaviour
 
 	private void OnCarSorted(object sender, List<CarTrackingDataDTO> cars)
 	{
+		/*
 		var index = -1;
 		var carFound = false;
 		while (index < cars.Count && !carFound)
@@ -77,6 +78,7 @@ public class RacerWidgetAdvanced : MonoBehaviour
 			PositionText.text = "--";
 			LapText.text = "0";
 		}
+		*/
 	}
 
 	private void OnCarEliminated(object sender, CarController controller)

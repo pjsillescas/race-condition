@@ -23,6 +23,7 @@ public class RaceStateWidget : MonoBehaviour
 		cars.ForEach(car => {
 			if (i < RacerWidgets.Count)
 			{
+				// Debug.Log($"widget {i}: {car.GetPlayerData().playerName} [{car.name}]");
 				RacerWidgets[i].Init(car);
 			}
 			i++;

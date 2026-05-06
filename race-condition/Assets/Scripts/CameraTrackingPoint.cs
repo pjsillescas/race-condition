@@ -150,7 +150,7 @@ public class CameraTrackingPoint : MonoBehaviour
 			weightedPositions[i] = GetWeight(i, weightedPositions.Count) * weightedPositions[i];
 		}
 
-		return weightedPositions.Aggregate(Vector3.zero, (acc, val) => val + acc) / activeCars.Count;
+		return weightedPositions.Aggregate(Vector3.zero, (acc, val) => val + acc) / weightedPositions.Count;
 	}
 
 	private float GetWeight(int index, int count)
