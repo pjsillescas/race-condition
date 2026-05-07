@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,14 +10,28 @@ public class MainMenuWidget : MonoBehaviour
 	void Start()
 	{
 		inputManager = FindAnyObjectByType<InputManager>();
+		inputManager.OnInteract += OnNewRound;
+	}
+
+	private void OnDestroy()
+	{
+		inputManager.OnInteract -= OnNewRound;
+	}
+
+	private void OnNewRound(object sender, EventArgs args)
+	{
+		//SceneManager.LoadScene("Playground");
+		OpenSelectWidget();
+	}
+
+	private void OpenSelectWidget()
+	{
+		;
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-		if (inputManager.GetNewRound())
-		{
-			SceneManager.LoadScene("Playground");
-		}
+		;
 	}
 }

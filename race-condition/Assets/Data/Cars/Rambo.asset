@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4d9eb9dd5efe97409c3c8ce60eb5d48, type: 3}
-  m_Name: Ferrari
+  m_Name: Rambo
   m_EditorClassIdentifier: Assembly-CSharp::CarDataSO
-  carName: Ferrari Testared
+  carName: Rambo Diablo III
   maxSpeedInTrack: 200
   maxSpeedOutOfTrack: 75
   CentreOfMassOffset: {x: 0, y: 0, z: 0}
@@ -28,5 +28,5 @@ MonoBehaviour:
   RevRangeBoundary: 1
   SlipLimit: 0.3
   BrakeTorque: 20000
-  material: {fileID: 2100000, guid: f0e69052a59b97945acb62121d2b9e27, type: 2}
+  material: {fileID: 2100000, guid: 436a764594bec3f4192e41393193348a, type: 2}
   CarPrefab: {fileID: 8520081248412799558, guid: dad62c7e91fe08f46b6786b065baff7b, type: 3}

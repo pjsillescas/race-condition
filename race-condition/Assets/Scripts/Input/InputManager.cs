@@ -1,7 +1,11 @@
+using System;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
+	public event EventHandler<Vector2> OnMove;
+	public event EventHandler OnInteract;
+
 	private InputActions actions;
 
 	private void Awake()
@@ -38,6 +42,14 @@ public class InputManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-
+		if(actions.Player.Move.WasPressedThisFrame())
+		{
+			OnMove?.Invoke(this, GetMoveVector());
+		}
+		
+		if (actions.Player.Jump.WasPressedThisFrame())
+		{
+			OnInteract?.Invoke(this, EventArgs.Empty);
+		}
 	}
 }
