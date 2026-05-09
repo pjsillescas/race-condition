@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
 
@@ -111,7 +112,7 @@ public class CameraTrackingPoint : MonoBehaviour
 		{
 			var carPosition = new Vector3(data.car.transform.position.x, 0, data.car.transform.position.z);
 			circuit.GetClosestPointIndexTo(carPosition, out float index, out float distance);
-
+			Debug.Log($"{data.car.name} - {index} - {distance}");
 			data.sortScore = (distance < 20f) ? index : 0;
 		});
 
@@ -133,6 +134,9 @@ public class CameraTrackingPoint : MonoBehaviour
 				return data1.lap < data2.lap ? -1 : 1;
 			}
 		});
+
+		var debugList = string.Join(",", activeCars.Select(car => $"{car.car.name}: {car.sortScore}").ToList());
+		Debug.Log(debugList);
 
 		OnCarSorted?.Invoke(this, activeCars);
 
