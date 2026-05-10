@@ -43,7 +43,7 @@ public class RoadMeshGenerator : MonoBehaviour
 		meshFilter = GetComponent<MeshFilter>();
 		meshRenderer = GetComponent<MeshRenderer>();
 
-if (meshFilter == null)
+		if (meshFilter == null)
         {
             meshFilter = gameObject.AddComponent<MeshFilter>();
         }
