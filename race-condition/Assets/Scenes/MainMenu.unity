@@ -1979,6 +1979,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSelectionWidget
   playerDataSO: {fileID: 11400000, guid: 0dbba56dc9cc7e141bccaab261cad41a, type: 2}
+  Adversaries:
+  - {fileID: 11400000, guid: a26df5968f973f44fbc052c5bc705c9f, type: 2}
+  - {fileID: 11400000, guid: f738ff6661f4ce84fbdd71f4b3b8a104, type: 2}
+  - {fileID: 11400000, guid: db573185194d54344a8cbc50b9c38df0, type: 2}
+  - {fileID: 11400000, guid: 145355aa161231c40a869fb652c1a68e, type: 2}
+  - {fileID: 11400000, guid: 4adca075ba4bdbf498f8dbc247acdd29, type: 2}
+  - {fileID: 11400000, guid: e05cd8e0854212544aa5b0d72bccbac8, type: 2}
+  - {fileID: 11400000, guid: 96d45412876171443a9d19efb5a74550, type: 2}
+  - {fileID: 11400000, guid: f4e8d49b01da2fc4592ce638df3d36e5, type: 2}
   cars:
   - {fileID: 11400000, guid: 80ddc5f55764c86489d9df80ea8c8bec, type: 2}
   - {fileID: 11400000, guid: f18e4fd29e0c99147af3b5c78458f13f, type: 2}
@@ -1990,6 +1999,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dd16ff9e8576bd24b878b41941a126bd, type: 2}
   levels:
   - {fileID: 11400000, guid: 57c32681d163ede4a8eb95eabf8b50d8, type: 2}
+  - {fileID: 11400000, guid: c1bf2032c62e27d47a8e8affcaa1b9f9, type: 2}
   characterContainer: {fileID: 237379408}
   playerNameInput: {fileID: 541058373}
   carNameText: {fileID: 1114202654}

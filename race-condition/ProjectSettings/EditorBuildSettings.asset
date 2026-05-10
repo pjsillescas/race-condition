@@ -11,6 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Playground.unity
     guid: 14a9244cf4eb5c14185c7c0f6cef9812
+  - enabled: 1
+    path: Assets/Scenes/Track1.unity
+    guid: db995f95ffe4c1648b251ff33c7272fc
+  - enabled: 1
+    path: Assets/Scenes/Track2.unity
+    guid: 3e0198b91d987ee4ca89d5bb124572e6
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05

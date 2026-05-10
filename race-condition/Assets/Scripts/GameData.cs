@@ -19,4 +19,9 @@ public class GameData : MonoBehaviour
 	{
 		AIData = data;
 	}
+
+	private void Awake()
+	{
+		DontDestroyOnLoad(this);
+	}
 }

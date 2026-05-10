@@ -11,6 +11,9 @@ public class PlayerSelectionWidget : MonoBehaviour
 	private PlayerDataSO playerDataSO;
 
 	[SerializeField]
+	private List<PlayerDataSO> Adversaries = new();
+
+	[SerializeField]
 	private List<CarDataSO> cars = new();
 
 	[SerializeField]
@@ -58,13 +61,45 @@ public class PlayerSelectionWidget : MonoBehaviour
 		DisplayCurrentLevel();
 	}
 
+	private PlayerDataSO GetRandomAdversary()
+	{
+		var index = UnityEngine.Random.Range(0, Adversaries.Count);
+		return Adversaries[index];
+	}
+
+	private void LoadAdversaries()
+	{
+		var gameData = FindAnyObjectByType<GameData>();
+
+		var adversaries = new List<PlayerDataSO>();
+		var numAdversaries = levels[currentLevelIndex].numIARacers;
+		for (int i = 0; i < numAdversaries; i++)
+		{
+			//var index = UnityEngine.Random.Range(0, Adversaries.Count);
+			//var ai = Adversaries[index];
+			var ai = GetRandomAdversary();
+			while (adversaries.Contains(ai))
+			{
+				//index = UnityEngine.Random.Range(0, Adversaries.Count);
+				//ai = Adversaries[index];
+				ai = GetRandomAdversary();
+			}
+
+			adversaries.Add(ai);
+		}
+
+		gameData.SetAIData(adversaries);
+	}
+
 	private void OnSelectCar(object sender, EventArgs args)
 	{
 		playerDataSO.carData = cars[currentCarIndex];
 		playerDataSO.playerName = playerNameInput.text;
 		Debug.Log($"player data {playerDataSO.playerName}");
 
-		SceneManager.LoadScene(levels[currentLevelIndex].LevelName);
+		LoadAdversaries();
+
+		SceneManager.LoadScene(levels[currentLevelIndex].LevelSceneName);
 	}
 
 	void Update()
