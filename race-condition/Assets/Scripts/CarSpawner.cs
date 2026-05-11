@@ -9,10 +9,6 @@ public class CarSpawner : MonoBehaviour
 	public static event EventHandler<List<CarController>> OnCarsDetected;
 
 	[SerializeField]
-	private GameObject PlayerCarPrefab;
-	[SerializeField]
-	private GameObject AICarPrefab;
-	[SerializeField]
 	private List<Transform> DisabledPositions;
 
 	private List<CarController> spawnedCars;
@@ -45,7 +41,10 @@ public class CarSpawner : MonoBehaviour
 		circuit = FindAnyObjectByType<SplineTrack>();
 
 		trafficLight = FindAnyObjectByType<TrafficLightController>();
-		trafficLight.Disable();
+		if (trafficLight != null)
+		{
+			trafficLight.Disable();
+		}
 
 		var gameData = FindAnyObjectByType<GameData>();
 
@@ -56,7 +55,7 @@ public class CarSpawner : MonoBehaviour
 
 	public void SpawnCars(List<PlayerDataSO> playersData)
 	{
-		if (circuit == null || PlayerCarPrefab == null || PlayerCarPrefab == null)
+		if (circuit == null)
 		{
 			return;
 		}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -204,6 +205,7 @@ public class SplineTrack : MonoBehaviour
 
 	public void GetClosestPointIndexTo(Vector3 targetPosition, out float index, out float bestDistance)
 	{
+		/*
 		int segmentCount = SegmentCount;
 		if (segmentCount == 0)
 		{
@@ -230,18 +232,25 @@ public class SplineTrack : MonoBehaviour
 
 		bestT = GoldenSectionSearch(bestT, targetPosition);
 		index = bestT;
+		*/
+		FindClosestPoint(targetPosition, out float tFinal, out Vector3 position);
+		index = tFinal;
+		bestDistance = (targetPosition - position).magnitude;
 	}
 
 	public Vector3 GetClosestPointTo(Vector3 targetPosition)
 	{
-		GetClosestPointIndexTo(targetPosition, out float bestT, out _);
-		return (bestT < 0) ? transform.position : GetPoint(bestT);
+		//GetClosestPointIndexTo(targetPosition, out float bestT, out _);
+		//return (bestT < 0) ? transform.position : GetPoint(bestT);
+		FindClosestPoint(targetPosition, out float tFinal, out Vector3 position);
+
+		return (tFinal < 0) ? transform.position : GetPoint(tFinal);
 	}
 
 	private float GoldenSectionSearch(float initialT, Vector3 targetPosition)
 	{
 		const float EPSILON = 0.0001f;
-		
+
 		float a = Mathf.Max(0f, initialT - 0.1f);
 		float b = Mathf.Min(1f, initialT + 0.1f);
 		float goldenRatio = (1f + Mathf.Sqrt(5f)) / 2f;
@@ -271,6 +280,79 @@ public class SplineTrack : MonoBehaviour
 		}
 
 		return (a + b) / 2f;
+	}
+
+	public void FindClosestPoint(Vector3 target, out float tFinal, out Vector3 position)
+	{
+		int samples = 128;
+		int refinementIterations = 16;
+
+		//----------------------------------------
+		// STEP 1:
+		// Coarse search by sampling the spline
+		//----------------------------------------
+
+		float tMax = GetTotalLength();
+		float bestT = 0.0f;
+		float bestDistSq = float.MaxValue;
+
+		for (int i = 0; i <= samples; i++)
+		{
+			float t = tMax * i / samples;
+
+			Vector3 p = GetPoint(t);
+
+			float distSq = (p - target).sqrMagnitude;
+
+			if (distSq < bestDistSq)
+			{
+				bestDistSq = distSq;
+				bestT = t;
+			}
+		}
+
+		//----------------------------------------
+		// STEP 2:
+		// Local refinement around best sample
+		//
+		// Uses shrinking interval search
+		// (simple + robust for splines)
+		//----------------------------------------
+
+		float range = tMax / samples;
+
+		for (int iter = 0; iter < refinementIterations; iter++)
+		{
+			float leftT = Mathf.Max(0.0f, bestT - range);
+			float rightT = Mathf.Min(tMax, bestT + range);
+
+			float midLeft = (leftT + bestT) * 0.5f;
+			float midRight = (bestT + rightT) * 0.5f;
+
+			float leftDist =
+				(GetPoint(midLeft) - target).sqrMagnitude;
+
+			float rightDist =
+				(GetPoint(midRight) - target).sqrMagnitude;
+
+			if (leftDist < bestDistSq)
+			{
+				bestDistSq = leftDist;
+				bestT = midLeft;
+			}
+
+			if (rightDist < bestDistSq)
+			{
+				bestDistSq = rightDist;
+				bestT = midRight;
+			}
+
+			// shrink search region
+			range *= 0.5f;
+		}
+
+		tFinal = bestT;
+		position = GetPoint(bestT);
 	}
 
 	private float DistanceTo(Vector3 targetPosition, float t)

@@ -17,7 +17,10 @@ public class CameraManager : MonoBehaviour
 			activeCamera.gameObject.SetActive(false);
 		}
 
-		activeCamera = camera;
-		camera.gameObject.SetActive(true);
+		if (camera != null)
+		{
+			activeCamera = camera;
+			camera.gameObject.SetActive(true);
+		}
     }
 }
