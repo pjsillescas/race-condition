@@ -44,10 +44,10 @@ public class InGameObjectDetector : MonoBehaviour
 				Instantiate(ExplosionPrefab, controller.transform.position, Quaternion.identity);
 			}
 			
-			controller.Disable();
-			cars.Remove(controller);
+			//controller.Disable();
+			//cars.Remove(controller);
 
-			OnCarEliminated?.Invoke(this, controller);
+			//OnCarEliminated?.Invoke(this, controller);
 
 			if (cars.Count == 1)
 			{

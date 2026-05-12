@@ -64,6 +64,10 @@ public class CameraTrackingPoint : MonoBehaviour
 			Gizmos.DrawWireCube(transform.position + boxCollider.center, 65f * Vector3.one);
 
 			Gizmos.DrawSphere(boxCollider.center + transform.position, 2f);
+
+			var point = circuit.GetPoint(index);
+			Gizmos.DrawSphere(point, 1f);
+
 		}
 	}
 #endif
@@ -80,6 +84,11 @@ public class CameraTrackingPoint : MonoBehaviour
 
 		cars = new();
 		//StartCoroutine(DetectCars());
+
+		var init = circuit.GetPoint(0);
+		var end = circuit.GetPoint(1);
+		var end1 = circuit.GetPoint(circuit.GetTotalLength());
+		Debug.Log($"{init} - {end} - {end1} [{circuit.GetTotalLength()}]");
 
 		ResetGame();
 	}
@@ -104,6 +113,7 @@ public class CameraTrackingPoint : MonoBehaviour
 		cars.Add(new CarTrackingDataDTO() { car = controller, sortScore = 0f, lap = 0, });
 	}
 
+	float index = -1;
 	private List<CarTrackingDataDTO> SortCars()
 	{
 		var activeCars = cars.Where(data => data.car.GetIsEnabled()).ToList();
@@ -112,8 +122,9 @@ public class CameraTrackingPoint : MonoBehaviour
 		{
 			var carPosition = new Vector3(data.car.transform.position.x, 0, data.car.transform.position.z);
 			circuit.GetClosestPointIndexTo(carPosition, out float index, out float distance);
-			Debug.Log($"{data.car.name} - {index} - {distance}");
+			//Debug.Log($"{data.car.name} - {index} - {distance}");
 			data.sortScore = (distance < 20f) ? index : 0;
+			this.index = index;
 		});
 
 		activeCars.Sort((data1, data2) =>
@@ -135,8 +146,8 @@ public class CameraTrackingPoint : MonoBehaviour
 			}
 		});
 
-		var debugList = string.Join(",", activeCars.Select(car => $"{car.car.name}: {car.sortScore}").ToList());
-		Debug.Log(debugList);
+		//var debugList = string.Join(",", activeCars.Select(car => $"{car.car.name}: {car.sortScore}").ToList());
+		//Debug.Log(debugList);
 
 		OnCarSorted?.Invoke(this, activeCars);
 
